@@ -44,7 +44,7 @@ Before beginning the installation process, ensure you have the following:
    - Clone or copy the repository into this location:
      ```
      cd C:/xampp/htdocs/
-     git clone https://github.com/CWU-WebVisor-Project/WebVisor.git
+     git clone https://github.com/LucasAMartin/WebVisor.git
      ```
      
 3. **Install PHP Composer:**
