@@ -44,9 +44,24 @@ Before beginning the installation process, ensure you have the following:
    - Clone or copy the repository into this location:
      ```
      cd C:/xampp/htdocs/
-     git clone https://github.com/CWU-WebVisor-Project/WebVisor.git
+     git clone https://github.com/LucasAMartin/WebVisor.git
      ```
+     
+3. **Install PHP Composer:**
+   - Download PHP composer latest version
+   - In your project folder, run 
+    ```composer install```
 
+3. **Create a .env file:**
+   - In the root, create a .env file. Add the keys with the format
+    ```
+   DB_HOST=localhost
+   DB_PORT=3307
+   DB_USER=root
+   DB_PASS=
+   DB_NAME=scheduler
+    ```
+   - The actual values may vary depending on your configuration
 ### Running the Application
 
 Access the application at `http://localhost/Webvisor`.
