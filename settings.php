@@ -89,7 +89,7 @@ if (true || $connected) { // Ensure $connected is defined and true to display me
 	<p>If you are not a superuser, you should only be able to access the <b>Student Information</b>, <b>Enrollments</b>, <b>Lost Students</b>, and <b>Settings</b> page.
 <?php } ?>
 
-    <form method="post" onsubmit="return validatePassword()">
+    <form method="post">
 		<table class='input'>
 <?php
 	if (!$user_info)
