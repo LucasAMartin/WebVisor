@@ -5,7 +5,7 @@ tr.even td
 
 tr.odd td
 {
-	background:LightBlue;
+	background:var(--secondaryLight);
 }
 
 label.checkbox
@@ -129,7 +129,7 @@ table.requestcalendar td.requested
 
 table.requestcalendar td.walkin
 {
-	background:lightblue;
+	background:var(--secondaryLight);
 }
 
 table.requestcalendar td.available
@@ -175,7 +175,7 @@ table.calendar td
 
 table.calendar td.scheduled
 {
-	background:lightblue;
+	background:var(--secondaryLight);
 }
 
 table.calendar td.requested
@@ -202,7 +202,7 @@ table.calendar div.event
 
 table.input td
 {
-	background-color:LightBlue;
+	background-color:var(--secondaryLight);
 	padding: 5px 10px 5px;
 	margin: 0px;
 }
@@ -224,10 +224,9 @@ table.input td.spacer
 
 table.schedule td
 {
-	padding:30px;
-	padding-top:0px;
+	padding: 0px 30px 30px;
 	text-align:left;
-	background-color:LightBlue;
+	background-color:var(--secondaryLight);
 }
 
 table.schedule tr.header td
@@ -307,19 +306,17 @@ body.print h2
 	{
 		display:none;
 	}
-	
+
 }
 
-.firstpage
-{
-{
+.firstpage {
 	height: 9in;
 	display:block;
 	position:relative;
 /*	border:dashed; */
 }
 
-.page
+.page {
 	page-break-before:always;
 	height: 9in;
 	display:block;
@@ -333,7 +330,7 @@ body.print h2
 	position:absolute;
 	bottom:0px;
 	left:0px;
-}	
+}
 
 body.print tr.header td
 {
@@ -348,6 +345,5 @@ body.print table
 
 body.print .tt
 {
-	font-family:monospace;
 	white-space:pre;
 }

@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="styles/core.css">
     <?php
 
     include_once("_html.php");
@@ -45,13 +46,14 @@
 
     ?>
     <title>Enrollments</title>
-    <link rel='stylesheet' type='text/css' href='_style.css'/>
+    <link rel='stylesheet' type='text/css' href='styles/_style.css'/>
 </head>
 <body>
 
 <?php echo(messages()); ?>
-<?php echo(linkmenu()); ?>
+<?php echo(linkmenu("Enrollments")); ?>
 
+<div class="content_container">
 <h1>Enrollments</h1>
 
 <table>
@@ -126,6 +128,6 @@
 
 
 </table>
-
+</div>
 </body>
 </html>

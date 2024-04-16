@@ -23,7 +23,7 @@
 	$journal = get_journal();
 ?>
 	<title>Journal</title>
-	<link rel='stylesheet' type='text/css' href='_style.css' />
+	<link rel="stylesheet" type="text/css" href="styles/_style.css"><link rel="stylesheet" type="text/css" href="styles/core.css">
 </head>
 <body>
 
@@ -34,13 +34,13 @@
 
 	<table>	
 		<tr>
-			<th>Date</td>
-			<th>User</td>
-			<th>Student</td>
-			<th>Class</td>
-			<th>Program</td>
-			<th>Major</td>
-			<th>Note</td>
+			<td>Date</td>
+			<td>User</td>
+			<td>Student</td>
+			<td>Class</td>
+			<td>Program</td>
+			<td>Major</td>
+			<td>Note</td>
 		</tr>
 <?php
 	foreach($journal as $entry)

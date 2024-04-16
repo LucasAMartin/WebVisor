@@ -6,6 +6,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles/core.css">
 <?php
 	
 	include_once("_html.php");
@@ -59,9 +60,9 @@
 
 <?php
 	echo(messages());
-	echo(linkmenu());
+	echo(linkmenu('Majors'));
 ?>
-
+<div class="content_container">
 	<form action='majors.php' method='get'>
         <td>
             <select id="program_id" name="program_id" class="select2-class">
@@ -89,6 +90,7 @@
 	}
 ?>
 	</table>
+</div>
 </body>
 </html>
 <script>

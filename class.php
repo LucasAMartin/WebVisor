@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<link rel='stylesheet' type='text/css' href='_style.css' />
+	<link rel="stylesheet" type="text/css" href="styles/_style.css"><link rel="stylesheet" type="text/css" href="styles/core.css">
     <link href="https://cdn.jsdelivr.net/npm/select2/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2/dist/js/select2.min.js"></script>
@@ -121,8 +121,9 @@ $all_classes = all_classes();
 
 <?php
 	echo(messages());
-	echo(linkmenu());
+	echo(linkmenu('Class Information'));
 ?>
+<div class="content_container">
 <h1>Class Information<?php if ($name != '') { echo(" &mdash; $name"); } ?></h1>
 
 <form action='class.php' method='post'>
@@ -323,6 +324,6 @@ $all_classes = all_classes();
 <?php
 	}
 ?>
-
+</div>
 </body>
 </html>

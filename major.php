@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<link rel='stylesheet' type='text/css' href='_style.css' />
+	<link rel="stylesheet" type="text/css" href="styles/_style.css">
+	<link rel="stylesheet" type="text/css" href="styles/core.css">
 <?php
     global $YES;
 	include_once("_html.php");
@@ -61,8 +62,8 @@
 </head>
 <body>
 
-<div><?php echo(linkmenu()); ?></div>
-
+<div><?php echo(linkmenu('Major Information')); ?></div>
+<div class="content_container">
 <h1>Major Information<?php if ($name != '') { echo(" &mdash; $name"); } ?></h1>
 
 <a href='./majors.php'>List of All Students in Major</a>
@@ -129,6 +130,6 @@
 <?php
 	}
 ?>
-
+</div>
 </body>
 </html>

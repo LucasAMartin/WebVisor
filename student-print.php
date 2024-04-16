@@ -82,9 +82,7 @@
 	$replacement_classes = get_replacement_classes($program_id);
 ?>
 	<title>Plan for Graduation</title>
-	<link rel='stylesheet' type='text/css' href='_style.css' />
-	<style>
-	</style>
+	<link rel="stylesheet" type="text/css" href="styles/_style.css"><link rel="stylesheet" type="text/css" href="styles/core.css">
 
 <?php
 ?>

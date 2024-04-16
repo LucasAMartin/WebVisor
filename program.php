@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<link rel='stylesheet' type='text/css' href='_style.css' />
+	<link rel="stylesheet" type="text/css" href="styles/_style.css"><link rel="stylesheet" type="text/css" href="styles/core.css">
     <link href="https://cdn.jsdelivr.net/npm/select2/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2/dist/js/select2.min.js"></script>
@@ -175,8 +175,9 @@
 
 <?php echo(messages()); ?>
 
-<?php echo(linkmenu()); ?>
+<?php echo(linkmenu("Program Information")); ?>
 
+<div class="content_container">
 <h1 id='top'>Program Information<?php if ($program_id != 0) { echo(" &mdash; $major_name ($program_year)"); } ?></h1>
 
 <form action='program.php' method='post'>
@@ -505,7 +506,7 @@
 	</div>
 
 </form>
-
+</div>
 <?php
 	}
 ?>

@@ -304,7 +304,8 @@
 	}
 ?>
 	<title>Student Plan<?php if ($name != '') echo(" - $name"); ?></title>
-	<link rel='stylesheet' type='text/css' href='_style.css' />
+	<link rel="stylesheet" type="text/css" href="styles/_style.css">
+	<link rel="stylesheet" type="text/css" href="styles/core.css">
 	<script>
 		function changed($element)
 		{
@@ -325,12 +326,13 @@
 		}
 	</script>
 </head>
+
 <body>
-
+<?php echo(linkmenu('Student Information')); ?>
 <?php echo(messages()); ?>
-<?php echo(linkmenu()); ?>
 
- 
+
+<div class="content_container">
 <h1>Student Plan</h1>
 
 <form action='student.php#message_end' method='post' id='select_student'>
@@ -349,6 +351,7 @@
                     <?php endforeach; ?>
                 </select>
 			</td>
+</div>
 <?php
 	if ($student_id == 0)
 	{

@@ -70,17 +70,17 @@
     }
     ?>
     <title>Settings</title>
-    <link rel='stylesheet' type='text/css' href='_style.css' />
+    <link rel="stylesheet" type="text/css" href="styles/_style.css"><link rel="stylesheet" type="text/css" href="styles/core.css">
 </head>
 <body>
 
 <?php
 if (true || $connected) { // Ensure $connected is defined and true to display messages and menu
     echo messages(); // Assuming this function prints session or other messages
-    echo linkmenu(); // Navigation menu
+    echo linkmenu('Settings'); // Navigation menu
 }
 ?>
-
+<div class="content_container">
 <h1>Settings</h1>
 
 <?php if ($user_info) { ?>
@@ -209,6 +209,7 @@ if (is_superuser($user_info)) {
             </tr>
         </table>
     </form>
+</div>
     <?php
     if (isset($_POST['add_user']) && !empty($_POST['new_user_login']) && !empty($_POST['new_user_pass'])) {
         // Ensuring all listed fields are set and not blank

@@ -21,15 +21,16 @@
 	$bad_cwu_ids = get_bad_cwu_ids();
 	
 ?>
-	<link rel="stylesheet" type="text/css" href="_style.css">
+	<link rel="stylesheet" type="text/css" href="styles/_style.css">
+	<link rel="stylesheet" type="text/css" href="styles/core.css">
 </head>
 <body>
 
 <?php
 	echo(messages());
-	echo(linkmenu());
+	echo(linkmenu('Lost Students'));
 ?>
-
+<div class="content_container">
 	<h2>Misinformed Students</h2>
 
 	<p>The table below students whose plans have enrolled them in classes during terms when those classes are not typically offered.</p>
@@ -65,5 +66,6 @@
 		echo("\t\t<tr><td style='padding:0px 5px;'>$cwu_id</td><td style='padding:0px 5px;'><a href='student.php?id=$cwu_id'>$name</a></td><td style='padding:0px 5px;'>$email</td><td style='padding:0px 5px;'>$active</td></tr>\n");
 	}
 ?>
+</div>
 </body>
 </html>

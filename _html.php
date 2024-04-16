@@ -1,32 +1,71 @@
 <?php
-	
-	function linkmenu()
-	{
-		$result = "";
-		$result .= "<a href='./student.php'>Student Information</a>";
-		$result .= " | ";
-		$result .= "<a href='./class.php'>Class Information</a>";
-		$result .= " | ";
-		$result .= "<a href='./program.php'>Program Information</a>";
-		$result .= " | ";
-		$result .= "<a href='./major.php'>Major Information</a>";
-		$result .= " | ";
-		$result .= "&nbsp;&nbsp;&nbsp;";
-		$result .= " | ";
-		$result .= "<a href='./term.php'>Enrollments</a>";
-		$result .= " | ";
-		$result .= "<a href='./majors.php'>Majors</a>";
-		$result .= " | ";
-		$result .= "<a href='./lost.php'>Lost Students</a>";
-		$result .= " | ";
-		$result .= "&nbsp;&nbsp;&nbsp;";
-		$result .= " | ";
-		$result .= "<a href='settings.php'>Settings</a>";
-		
-		return $result;
+
+function linkmenu($currentPage) {
+	$pages = [
+		'Student Information' => './student.php',
+		'Class Information' => './class.php',
+		'Program Information' => './program.php',
+		'Major Information' => './major.php',
+		'Enrollments' => './term.php',
+		'Majors' => './majors.php',
+		'Lost Students' => './lost.php'
+	];
+
+	$html = <<<HTML
+<header id="cs-navigation">
+    <div class="cs-container">
+        <!--Nav Logo-->
+        <a href="" class="cs-logo" aria-label="back to home">
+            <img src="assets/logo.png" alt="logo" width="210" height="29" aria-hidden="true" decoding="async">
+        </a>
+        <!--Navigation List-->
+        <nav class="cs-nav" role="navigation">
+            <!--Mobile Nav Toggle-->
+            <button class="cs-toggle" aria-label="mobile menu toggle">
+                <div class="cs-box" aria-hidden="true">
+                    <span class="cs-line cs-line1" aria-hidden="true"></span>
+                    <span class="cs-line cs-line2" aria-hidden="true"></span>
+                    <span class="cs-line cs-line3" aria-hidden="true"></span>
+                </div>
+            </button>
+            <div class="cs-ul-wrapper">
+                <ul id="cs-expanded" class="cs-ul" aria-expanded="false">
+HTML;
+
+	foreach ($pages as $pageName => $pageLink) {
+		$activeClass = ($currentPage === $pageName) ? 'cs-active' : '';
+		$html .= <<<HTML
+                    <li class="cs-li">
+                        <a href="$pageLink" class="cs-li-link $activeClass">
+                            $pageName
+                        </a>
+                    </li>
+HTML;
 	}
-	
-	function catalog_year($date)
+
+	// Add the Settings link with a different class
+	$activeClass = ($currentPage === 'Settings') ? 'cs-active' : '';
+	$html .= <<<HTML
+                    <li class="cs-li">
+                        <a href="settings.php" class="cs-button-solid cs-nav-button $activeClass">
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
+<script src="scripts/nav.js"></script>
+HTML;
+
+	return $html;
+}
+
+
+
+
+function catalog_year($date)
 	{
 		$year = date('Y', $date);
 		if (date('n', $date) < 7)
