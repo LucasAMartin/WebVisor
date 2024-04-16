@@ -1795,7 +1795,7 @@ GROUP BY
 
 		$query_string = "
 		SELECT
-			id, cwu_id, CONCAT(first, ' ', last) AS name, email, first, last, active, phone, address, postbaccalaureate, non_stem_majors, withdrawing, veterans_benefits
+			id, cwu_id, CONCAT(first, ' ', last) AS name, email, first, last, active, phone, address, postbaccalaureate, non_stem_majors, withdrawing, veterans_benefits, international_student,  transfer_student
 		FROM
 			Students
 		WHERE
@@ -1894,7 +1894,7 @@ GROUP BY
 		return $student_id;
 	}
 
-	function update_student($user_id, $student_id, $first, $last, $cwu_id, $email, $phone, $address, $postbaccalaureate, $withdrawing, $veterans_benefits, $active)
+	function update_student($user_id, $student_id, $first, $last, $cwu_id, $email, $phone, $address, $postbaccalaureate, $withdrawing, $veterans_benefits, $active, $international_student, $transfer_student)
 	{
 		global $link;
 		$query_string = "
@@ -1910,7 +1910,10 @@ GROUP BY
 			postbaccalaureate='$postbaccalaureate',
 			withdrawing='$withdrawing',
 			veterans_benefits='$veterans_benefits',
-			active='$active'
+			active='$active',
+			international_student='$international_student',
+			transfer_student='$transfer_student'
+		
 		WHERE
 			id=$student_id
 			;";

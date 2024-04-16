@@ -78,7 +78,7 @@
 		
 		$active = extract_yesno($_POST, 'update_active');
 
-		update_student($user_id, $student_id, $first, $last, $cwu_id, $email, $phone, $address, $postbaccalaureate, $withdrawing, $veterans_benefits, $active);
+		update_student($user_id, $student_id, $first, $last, $cwu_id, $email, $phone, $address, $postbaccalaureate, $withdrawing, $veterans_benefits, $active, $international_student, $transfer_student);
 	}
 	
 	//!- Update Program Info
@@ -241,6 +241,8 @@
 		$postbaccalaureate = $student_info['postbaccalaureate'];
 		$withdrawing = $student_info['withdrawing'];
 		$veterans_benefits = $student_info['veterans_benefits'];
+		$transfer_student = $student_info['transfer_student'];
+		$international_student = $student_info['international_student'];
 		
 		$non_stem_majors = $student_info['non_stem_majors'];
 		

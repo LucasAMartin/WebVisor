@@ -108,6 +108,8 @@ CREATE TABLE Students (
     veterans_benefits ENUM('Yes', 'No') NULL,
     active ENUM('Yes', 'No') DEFAULT 'Yes' NOT NULL,
     non_stem_majors VARCHAR(256) NULL,
+    international_student ENUM('Yes', 'No') DEFAULT 'No',
+    transfer_student ENUM('Yes', 'No') DEFAULT 'No',
     CONSTRAINT uq_Student_cwuid UNIQUE (cwu_id),
     CONSTRAINT uq_Student_email UNIQUE (email)
 )  ENGINE=INNODB;
