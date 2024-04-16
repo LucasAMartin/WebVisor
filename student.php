@@ -73,6 +73,8 @@
 		$postbaccalaureate = extract_yesno($_POST, 'update_postbaccalaureate');
 		$withdrawing = extract_yesno($_POST, 'update_withdrawing');
 		$veterans_benefits = extract_yesno($_POST, 'update_veterans_benefits');
+		$international_student = extract_yesno($_POST, 'update_international_student');
+		$transfer_student = extract_yesno($_POST, 'update_transfer_student');
 		
 		$active = extract_yesno($_POST, 'update_active');
 
@@ -474,12 +476,16 @@
 		<tr>
 			<td>Phone:</td>
 			<td><input type='text' class='phone' name='update_phone' value='<?php echo($phone); ?>' /></td>
-			<td colspan='3'/>
+			<td />
+			<td>International Student:</td>
+			<td><?php echo(checkbox('', 'update_international_student', $international_student == $YES)); ?></td>
 		</tr>
 		<tr>
 			<td>Address:</td>
 			<td rowspan='4'><textarea class='address' rows='5' name='update_address' ><?php echo($address); ?></textarea></td>
-			<td colspan='3'/>
+			<td />
+			<td>Transfer Student:</td>
+			<td><?php echo(checkbox('', 'update_transfer_student', $transfer_student == $YES)); ?></td>
 		</tr>
 		<tr>
 			<td colspan='5' />
