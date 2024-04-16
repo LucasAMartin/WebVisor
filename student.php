@@ -1003,6 +1003,13 @@
 
         // Set to null for no default selection
         $('#student_id').val(null).trigger('change');
+
+		let transferStudent = document.querySelector('input[name="update_transfer_student"]').checked;
+		let internationalStudent = document.querySelector('input[name="update_international_student"]').checked;
+
+		if (transferStudent || internationalStudent) {
+			document.documentElement.style.setProperty('--secondaryLight', 'yellow');
+		}
     });
 </script>
 
