@@ -41,8 +41,7 @@
 		$winter = extract_yesno($_POST, 'new_winter');
 		$spring = extract_yesno($_POST, 'new_spring');
 		$summer = extract_yesno($_POST, 'new_summer');
-		
-		$class_id = add_class($user_id, $name, $credits, $title, $fall, $winter, $spring, $summer);
+		$grades = $_POST['grade'];
 	}
 	
 	if (isset($_POST['update_class']))
@@ -62,13 +61,17 @@
 
         // Loop through each selected class ID and add it as a prerequisite
         foreach ($selectedClassIds as $selectedClassId) {
+			echo($selectedClassId);
             // Assuming $studentClassId and $programId need to be determined or are known
 
-            $minimumGrade = 'C';
+            $minimumGrade = 20;
 
             // Call the function to add each prerequisite
             addPrerequisite($class_id, $selectedClassId, $minimumGrade);
         }
+		// Get the new grades from the form data
+		$grades = $_POST['grade'];
+		update_prereqs($class_id, array_keys($grades), $grades);
 	}
 
     function addPrerequisite($classId, $prerequisiteId, $minimumGrade) {
@@ -231,7 +234,7 @@ $all_classes = all_classes();
 		<tr>
 			<td />
 			<td><?php echo($name); ?> with a
-<?php echo(array_menu("\t\t\t\t", $all_grades, "grade-$id", $min)); ?>
+				<?php echo(array_menu("\t\t\t\t", $all_grades, "grade[$id]", $min)); ?>
 			</td>
 		</tr>
 <?php
