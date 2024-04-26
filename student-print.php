@@ -41,7 +41,7 @@
 	$address = $student_info['address'];
 
 	$postbaccalaureate = $student_info['postbaccalaureate'];
-	$second_major = $student_info['second_major'];
+	$second_major = array_key_exists('second_major', $student_info) ? $student_info['second_major'] : null;
 	$withdrawing = $student_info['withdrawing'];
 	$veterans_benefits = $student_info['veterans_benefits'];
 	
