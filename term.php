@@ -59,7 +59,7 @@ if (!$export_csv) {
 
     // Set headers for CSV download
     header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="Enrollments.csv');
+    header('Content-Disposition: attachment; filename="Enrollments.csv"');
 
     // Open a file pointer for writing CSV data
     $output = fopen('php://output', 'w');

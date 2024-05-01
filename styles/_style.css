@@ -1,12 +1,3 @@
-tr.even td
-{
-	background:LightGray;
-}
-
-tr.odd td
-{
-	background:var(--secondaryLight);
-}
 
 label.checkbox
 {
@@ -14,57 +5,12 @@ label.checkbox
 	padding: 0px 5px;
 }
 
-
-span.error input[type="search"],
-span.error select
-{
-	background-color:Red;
-}
-span.error input[type="search"].changed,
-span.error select.changed
-{
-	background-color:Orange;
-}
-
-input[type="search"].changed,
-select.changed
-{
-	background-color:Orange;
-}
-
-input[type="search"].changed
-{
-	background-color:Orange;
-}
-
-div.sql
-{
-	color:White;
-}
-
-div.messages
-{
-	margin:0px 0px 20px;
-	padding:10px 10px 10px;
-	background-color:LightGray;
-}
-
-input.nameid
-{
-	width:200px;
-}
-
-input.email
-{
-	width:120px;
-}
-
 /* NOTES TABLE */
 
 table.input td.flagged
 {
 	font-size:larger;
-	background-color:Pink;
+	background-color: var(--primaryLight)
 }
 
 table.input td.replaced
@@ -346,4 +292,46 @@ body.print table
 body.print .tt
 {
 	white-space:pre;
+}
+
+
+
+tr.odd td
+{
+	background:var(--secondaryLight);
+}
+
+span.error input[type="search"],
+span.error select
+{
+	background-color:Red;
+}
+
+span.error input[type="search"].changed,
+span.error select.changed
+{
+	background-color:Orange;
+}
+
+input[type="search"].changed,
+select.changed
+{
+	background-color:Orange;
+}
+
+input[type="search"].changed
+{
+	background-color:Orange;
+}
+
+div.sql
+{
+	color:White;
+}
+
+div.messages
+{
+	margin:0px 0px 20px;
+	padding:10px 10px 10px;
+	background-color:LightGray;
 }

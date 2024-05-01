@@ -2403,50 +2403,56 @@ GROUP BY
 		return $all_students;
 	}
 
-	function all_students($active_only = false)
+function all_students($inactiveOnly = false): array
+{
+	if ($inactiveOnly)
 	{
 		$query_string = "
-		SELECT
-			id,
-			CONCAT(COALESCE(last,'*'), ', ', COALESCE(first,'*'), ' (', cwu_id, ')') AS name
-		FROM
-			Students
-		WHERE
-			cwu_id != 0
-		ORDER BY
-			active, last, first ASC
-			;";
-		if ($active_only)
-		{
-			$query_string = "
-			SELECT
-				id,
-				CONCAT(COALESCE(last,'*'), ', ', COALESCE(first,'*'), ' (', cwu_id, ')') AS name
-			FROM
-				Students
-			WHERE
-				cwu_id != 0
-				AND
-				active = 'Yes'
-			ORDER BY
-				last, first ASC
-				;";
-		}
-
-		$query_result = my_query($query_string, false);
-
-		$all_students = array();
-		while ($row = mysqli_fetch_assoc($query_result))
-		{
-			$id = $row['id'];
-			$name = $row['name'];
-			$all_students[$id] = $name;
-		}
-
-		return $all_students;
+        SELECT
+            id,
+            CONCAT(COALESCE(last,'*'), ', ', COALESCE(first,'*'), ' (', cwu_id, ')') AS name
+        FROM
+            Students
+        WHERE
+            cwu_id != 0
+            AND
+            active = 'No'
+        ORDER BY
+            last, first ASC
+            ;";
+	}
+	else
+	{
+		$query_string = "
+        SELECT
+            id,
+            CONCAT(COALESCE(last,'*'), ', ', COALESCE(first,'*'), ' (', cwu_id, ')') AS name
+        FROM
+            Students
+        WHERE
+            cwu_id != 0
+            AND
+            active = 'Yes'
+        ORDER BY
+            last, first ASC
+            ;";
 	}
 
-	function get_electives_credits($student_id, $program_id)
+	$query_result = my_query($query_string, false);
+
+	$all_students = array();
+	while ($row = mysqli_fetch_assoc($query_result))
+	{
+		$id = $row['id'];
+		$name = $row['name'];
+		$all_students[$id] = $name;
+	}
+
+	return $all_students;
+}
+
+
+function get_electives_credits($student_id, $program_id)
 	{
 		$query_string = "
 		SELECT

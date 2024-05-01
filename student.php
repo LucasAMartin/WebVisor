@@ -193,35 +193,36 @@
     $all_programs_blank = array('0' => '') + all_programs($user_id);
 
     $all_students_blank = array('0' => '');
-    if ($user_id != 0)
-    {
-        $students_for_user = students_for_user($user_id);
-        if (count($students_for_user) > 0)
-        {
-            $all_students_blank = $all_students_blank + array('00' => '');
-            $all_students_blank = $all_students_blank + array('000' => '==YOUR ADVISEES==');
-            $all_students_blank = $all_students_blank + $students_for_user;
+    $inactiveStudents = isset($_POST['inactive_students']);
+    if (!$inactiveStudents) {
+        if ($user_id != 0) {
+            $students_for_user = students_for_user($user_id);
+            if (count($students_for_user) > 0) {
+                $all_students_blank = $all_students_blank + array('00' => '');
+                $all_students_blank = $all_students_blank + array('000' => '==YOUR ADVISEES==');
+                $all_students_blank = $all_students_blank + $students_for_user;
+            }
         }
-    }
-    if ($program_id != 0)
-    {
-        $students_in_program = array();
-        //	$students_in_program = students_in_program($program_id);
-        //	echo("Students in program: $program_id");
-        //	print_r($students_in_program);
-        if (count($students_in_program) > 0)
-        {
-            $all_students_blank = $all_students_blank + array('0000' => '');
-            $all_students_blank = $all_students_blank + array('00000' => '==PROGRAM STUDENTS==');
-            // we get here
-            $all_students_blank = $all_students_blank + $students_in_program;
-            // but we do not get here
+        if ($program_id != 0) {
+            $students_in_program = array();
+            //	$students_in_program = students_in_program($program_id);
+            //	echo("Students in program: $program_id");
+            //	print_r($students_in_program);
+            if (count($students_in_program) > 0) {
+                $all_students_blank = $all_students_blank + array('0000' => '');
+                $all_students_blank = $all_students_blank + array('00000' => '==PROGRAM STUDENTS==');
+                // we get here
+                $all_students_blank = $all_students_blank + $students_in_program;
+                // but we do not get here
+            }
         }
-    }
 
     $all_students_blank = $all_students_blank + array('000000' => '');
     $all_students_blank = $all_students_blank + array('0000000' => '==OTHER STUDENTS==');
     $all_students_blank = $all_students_blank + all_students();
+    } else {
+        $all_students_blank = $all_students_blank + all_students(true);
+    }
 
     $all_years = all_years();
     $all_years_blank = array('0' => '') + $all_years;
@@ -336,6 +337,8 @@
                         <?php endforeach; ?>
                     </select>
                 </td>
+                <td>Inactive Students:</td>
+
 </div>
 <?php
 if ($student_id == 0)
@@ -355,6 +358,7 @@ if ($student_id == 0)
         echo(array_menu("\t\t\t\t", $all_programs_blank, 'program_id', $program_id, true, '2'));
         ?>
     </td>
+    <td><?php echo(checkbox('', 'inactive_students', $inactiveStudents)); ?></td>
     <?php
     if ($student_id == 0)
     {
@@ -369,6 +373,7 @@ if ($student_id == 0)
 <tr>
     <td />
     <td><input type='submit' name='Load' /></td>
+    <td/>
     <?php
     if ($student_id == 0)
     {
@@ -990,11 +995,11 @@ if ($student_id == 0)
         $('#student_id').val(null).trigger('change');
 
         let transferStudent = document.querySelector('input[name="update_transfer_student"]').checked;
+        let veteranBenefits = document.querySelector('input[name="update_veterans_benefits"]').checked;
         let internationalStudent = document.querySelector('input[name="update_international_student"]').checked;
 
-        if (transferStudent || internationalStudent) {
-            document.documentElement.style.setProperty('--secondaryLight', 'yellow');
-            document.body.style.background = "linear-gradient(90deg, rgba(255, 0, 0, 1) 0%, rgba(255, 154, 0, 1) 10%, rgba(208, 222, 33, 1) 20%, rgba(79, 220, 74, 1) 30%, rgba(63, 218, 216, 1) 40%, rgba(47, 201, 226, 1) 50%, rgba(28, 127, 238, 1) 60%, rgba(95, 21, 242, 1) 70%, rgba(186, 12, 248, 1) 80%, rgba(251, 7, 217, 1) 90%, rgba(255, 0, 0, 1) 100%)";
+        if (transferStudent || internationalStudent || veteranBenefits) {
+            document.documentElement.style.setProperty('--secondaryLight', 'lightblue');
         }
 
     });
