@@ -217,9 +217,9 @@
             }
         }
 
-    $all_students_blank = $all_students_blank + array('000000' => '');
-    $all_students_blank = $all_students_blank + array('0000000' => '==OTHER STUDENTS==');
-    $all_students_blank = $all_students_blank + all_students();
+        $all_students_blank = $all_students_blank + array('000000' => '');
+        $all_students_blank = $all_students_blank + array('0000000' => '==OTHER STUDENTS==');
+        $all_students_blank = $all_students_blank + all_students();
     } else {
         $all_students_blank = $all_students_blank + all_students(true);
     }
@@ -390,12 +390,12 @@ if ($student_id == 0)
 {
     ?>
     <tr>
-        <td colspan='3' class='spacer' />
+        <td colspan='4' class='spacer' />
         <td>New Student Email:</td>
         <td><input type='text' class='nameid' name='add_email' value='' tabindex='6'/> @ cwu.edu</td>
     </tr>
     <tr>
-        <td colspan='3' class='spacer' />
+        <td colspan='4' class='spacer' />
         <td />
         <td><input type='submit' name='add_student' value='Add New Student' /></td>
     </tr>
