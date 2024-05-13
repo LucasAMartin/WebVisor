@@ -21,6 +21,7 @@ $all_programs_blank = array(0 => '') + all_programs();
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2/dist/css/select2.min.css" rel="stylesheet" />
@@ -31,6 +32,8 @@ $all_programs_blank = array(0 => '') + all_programs();
 </head>
 <body>
 <style>
+
+
     table {
         margin-top: 20px;
         width: 100%;
@@ -115,7 +118,7 @@ echo(linkmenu('Majors'));
 
         // Enable or disable Export to CSV button based on table data availability
         $('#exportButton').prop('disabled', $('#rosterTable tr').length <= 1);
-        
+
         // Export to CSV functionality
         $('#exportButton').click(function() {
             var csvContent = "data:text/csv;charset=utf-8,";
@@ -133,3 +136,4 @@ echo(linkmenu('Majors'));
         });
     });
 </script>
+
