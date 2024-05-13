@@ -84,7 +84,7 @@ $replacement_classes = get_replacement_classes($program_id);
     <head>
         <title>Plan for Graduation</title>
         <link rel="stylesheet" type="text/css" href="styles/_style.css">
-            <link rel="stylesheet" type="text/css" href="styles/core.css">
+            <link rel="stylesheet" type="text/css" href="styles/navbar.css">
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
                 <meta http-equiv='refresh' content='0; url=http://webwork.math.cwu.edu/webvisor/student.php' />
                 <style>

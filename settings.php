@@ -70,7 +70,7 @@
     }
     ?>
     <title>Settings</title>
-    <link rel="stylesheet" type="text/css" href="styles/_style.css"><link rel="stylesheet" type="text/css" href="styles/core.css">
+    <link rel="stylesheet" type="text/css" href="styles/_style.css"><link rel="stylesheet" type="text/css" href="styles/navbar.css">
 </head>
 <body>
 

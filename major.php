@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<link rel="stylesheet" type="text/css" href="styles/_style.css">
-	<link rel="stylesheet" type="text/css" href="styles/core.css">
+	<link rel="stylesheet" type="text/css" href="styles/navbar.css">
 <?php
     global $YES;
 	include_once("_html.php");

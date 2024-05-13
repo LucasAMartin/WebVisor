@@ -3,6 +3,7 @@
     --primaryLight: #B24A4C;
     --secondary: #8B0025;
     --secondaryLight: #CE7A82;
+    --secondaryLightest: #FFECEC;
     --headerColor: #1a1a1a;
     --bodyTextColor: #4e4b66;
     --bodyTextColorWhite: #fafbfc;
@@ -19,7 +20,7 @@ body {
 }
 
 .content_container {
-    margin-top: 8rem;
+    margin-top: 7.5rem;
 }
 
 /*-- -------------------------- -->

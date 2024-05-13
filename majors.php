@@ -25,7 +25,7 @@ $all_programs_blank = array(0 => '') + all_programs();
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2/dist/js/select2.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles/core.css">
+    <link rel="stylesheet" type="text/css" href="styles/navbar.css">
     <title>Program Roster</title>
     <link rel='stylesheet' type='text/css' href='styles/_style.css'/>
 </head>

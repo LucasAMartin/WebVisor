@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" type="text/css" href="styles/_style.css">
-    <link rel="stylesheet" type="text/css" href="styles/core.css">
+    <link rel="stylesheet" type="text/css" href="styles/test.css">
+    <link rel="stylesheet" type="text/css" href="styles/navbar.css">
     <link href="https://cdn.jsdelivr.net/npm/select2/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2/dist/js/select2.min.js"></script>
@@ -130,12 +130,12 @@ echo(messages());
 echo(linkmenu('Class Information'));
 ?>
 <div class="content_container">
-    <h1>Class Information<?php if ($name != '') {
-            echo(" &mdash; $name");
-        } ?></h1>
+    <h1 class="hidden">Class Information - CS XXX (Xcr)</h1>
 
-    <form action='class.php' method='post'>
-
+    <form action='class.php' method='post' id="select_class">
+        <h2>Class Information<?php if ($name != '') {
+                echo(" &mdash; $name");
+            } ?></h2>
         <table class='input'>
             <tr>
                 <td>Class:</td>
@@ -155,6 +155,11 @@ echo(linkmenu('Class Information'));
             <?php
             if ($class_id == 0) {
                 ?>
+                <script>
+                    window.onload = function() {
+                        document.getElementById("select_class").style.width = "100%";
+                    }
+                </script>
                 <tr>
                     <td class='spacer'/>
                     <td class='spacer'/>
