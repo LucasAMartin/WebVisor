@@ -398,18 +398,9 @@
         <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
         <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
 
-<?php
-	if ($student_id != 0)
-	{
-    }
-		if ($program_id != 0)
-		{
-        }
-?>
-	<p><a href='student-print.php?cwu_id=<?php echo($cwu_id); ?>&amp;program_id=<?php echo($program_id); ?>'>Printable Copy</a></p>
-<?php
 
-?>
+        
+	<p><a href='student-print.php?cwu_id=<?php echo($cwu_id); ?>&amp;program_id=<?php echo($program_id); ?>'>Printable Copy</a></p>
 
         <h2>Student Information</h2>
 
@@ -670,7 +661,7 @@
 				$title = "";
                 if ($class_info !== null) {
                     //Check for Prereqs
-                    [$prereqs_met, $missing_prereqs] = prerequisites_scheduled_before_term($classes_by_term, $class_id, $year, $term_number, $all_classes);
+                    [$prereqs_met, $missing_prereqs] = prerequisites_scheduled_before_term(/*$classes_by_term*/$plan['by term'], $class_id, $year, $term_number, $all_classes);
                     if (!$prereqs_met) {
                         $missing_prereqs_list = implode(', ', $missing_prereqs); // Convert missing prereqs to a comma-separated list
                         $style = " class='prereq-error'";

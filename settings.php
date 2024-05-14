@@ -18,7 +18,7 @@
         setcookie('webvisor_password', '', time() - 1);
         $_SESSION['logged_in'] = false; // Adjust session to reflect logout
     } else {
-        $user_info = get_user_info($login, $password, true, true);
+    $user_info = get_user_info($login, $password, true /*,true*/);
     }
 
     if ($user_info) {
@@ -54,7 +54,7 @@
                 $update_success = update_user($user_id, $hashed_new_password, $advisor_name, $program_id);
                 if ($update_success) {
                     // Re-fetch user info to update session variables
-                    $user_info = get_user_info($login, $hashed_new_password, '', true);
+                $user_info = get_user_info($login, $hashed_new_password, '' /*,true*/);
                     $_SESSION['user_info'] = $user_info; // Update the user_info session variable if needed
                     // No need to redirect to login page, refresh the current page instead
                     header('Location: ' . $_SERVER['REQUEST_URI']);
@@ -245,11 +245,7 @@ if (is_superuser($user_info)) {
 }
 ?>
 
-
-<?php
-	if (false)
-	{
-?>		
+<!-- 
 <h1>Help</h1>
 
 <p>This will eventually expand to (hopefully) become useful. Right now it is just a place where I put ideas I don't want to forget.</p>
@@ -285,10 +281,7 @@ if (is_superuser($user_info)) {
 			<li>the <strong>Prerequisites</strong> for the class. This is not currently used, but the system should eventually be able to determine when a student is taking the classes out of sequence.</li>
 		</ul>
 	
-	
-<?php
-	}
-?>	
+	 -->
 </body>
 </html>
 <script>
