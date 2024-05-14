@@ -113,7 +113,6 @@
 
         $query = "UPDATE prerequisites SET minimum_grade = ? WHERE class_id = ? AND prerequisite_id = ?";
         $stmt = mysqli_prepare($link, $query);
-    }
 
         mysqli_stmt_bind_param($stmt, 'sii', $minimumGrade, $classId, $prereqId);
 
@@ -123,6 +122,7 @@
 
         mysqli_stmt_close($stmt);
     }
+    
     function addPrerequisite($classId, $prerequisiteId, $minimumGrade) {
         global $link; // Assuming $link is your database connection variable
 

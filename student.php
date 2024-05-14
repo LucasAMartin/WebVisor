@@ -401,8 +401,10 @@
 <?php
 	if ($student_id != 0)
 	{
+    }
 		if ($program_id != 0)
 		{
+        }
 ?>
 	<p><a href='student-print.php?cwu_id=<?php echo($cwu_id); ?>&amp;program_id=<?php echo($program_id); ?>'>Printable Copy</a></p>
 <?php
@@ -740,34 +742,36 @@
         <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
 
         <h2>Program Requirements
-        </h2>
-
-        <?php
-        if ($program_id == 0) {
-            ?>
-            <table class='input'>
-                <tr>
-                    <td>You must select a program from the top of the page to check graduation requirements.</td>
-                </tr>
-            </table>
-            <?php
-        } else {
-            ?>
-            <?php #print_array($electives);
-            ?>
-            <table class='input'>
-                <tr class='header'>
-                    <td colspan='3'>Core Courses</td>
-                    <td class='spacer'/>
-                    <td>Electives</td>
-                </tr>
-                <?php
-                $row = 0;
-                $col = 0;
-                ?>
-                <tr>
-                    <?php
-                    foreach ($required_classes
+	</h2>
+	
+<?php
+		if ($program_id == 0)
+		{
+?>
+	<table class='input'>
+		<tr>
+			<td>You must select a program from the top of the page to check graduation requirements.</td>
+			</tr>
+	</table>
+<?php
+		}
+		else
+		{
+?>		
+	<?php #print_array($electives); ?>
+	<table class='input'>
+		<tr class='header'>
+			<td colspan='3'>Core Courses</td>
+			<td class='spacer' />
+			<td>Electives</td>
+		</tr>
+<?php
+			$row = 0;
+			$col = 0;
+?>
+		<tr>
+<?php
+			$elective_names = array();
 
 			foreach($required_classes as $required_id => $info)
 			{
