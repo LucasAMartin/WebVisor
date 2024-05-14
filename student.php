@@ -536,7 +536,7 @@
         </table>
 
     </form>
-
+        } php?>
 <div class="container">
     <div class="student-plan-column">
         <h2>Student Plan</h2>
