@@ -22,7 +22,6 @@ $all_programs_blank = array(0 => '') + all_programs();
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2/dist/js/select2.min.js"></script>
@@ -32,7 +31,6 @@ $all_programs_blank = array(0 => '') + all_programs();
 </head>
 <body>
 <style>
-
 
     table {
         margin-top: 20px;
