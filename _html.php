@@ -16,7 +16,7 @@ function linkmenu($currentPage) {
     <div class="cs-container">
         <!--Nav Logo-->
         <a href="" class="cs-logo" aria-label="back to home">
-            <img src="assets/logo.png" alt="logo" width="210" height="29" aria-hidden="true" decoding="async">
+            <img src="assets/logo.png" alt="logo" width="224" height="65" aria-hidden="true" decoding="async">
         </a>
         <!--Navigation List-->
         <nav class="cs-nav" role="navigation">

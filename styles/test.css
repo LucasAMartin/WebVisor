@@ -260,7 +260,7 @@ table.input td
 
 table.input td.alt
 {
-    background-color:LightSkyBlue;
+    background-color:var(--secondaryLightest);
     padding: 5px 10px 5px;
     margin: 0px;
 }
