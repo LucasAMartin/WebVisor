@@ -543,13 +543,12 @@
         <?php
     }
     ?>
-    <div class="container">
-        <div class="student-plan-column">
-            <h2>Student Plan</h2>
+    <?php
+    if ($student_id != 0) {
+    ?>
             <form action='student.php#student_plan' method='post' id='student_plan'>
                 <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
                 <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
-
 
                 <h2>Student Plan</h2>
 
@@ -737,6 +736,9 @@
                 </table>
 
             </form>
+    <?php
+    }
+    ?>
             <form action='student.php#program_requirements' method='post' id='program_requirements'>
                 <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
                 <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
@@ -1038,7 +1040,6 @@
                 ?>
 
             </form>
-        </div>
         <script>
             $(document).ready(function () {
                 // Initialize Select2 on your student dropdown
