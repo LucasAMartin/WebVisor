@@ -320,7 +320,19 @@
                         </select>
                     </td>
                     <td>Inactive Students:</td>
+                    <?php
+                    if ($student_id != 0) {
+                    ?>
+                    <td>
+                        <p>
+                            <input type="button" value="Download Student Plan"
+                                   onclick="window.location.href='student-print.php?cwu_id=<?php echo $cwu_id; ?>&program_id=<?php echo $program_id; ?>&pdf=1';">
+                        </p>
+                    </td>
 
+                <?php
+                }
+                ?>
 
                     <?php
                     if ($student_id == 0) {
@@ -349,10 +361,23 @@
                         <?php
                     }
                     ?>
+                    <?php
+                    if ($student_id != 0) {
+                        ?>
+                        <td><input type='submit' name='Load'/></td>
+                        <?php
+                    }
+                    ?>
                 </tr>
                 <tr>
                     <td/>
-                    <td><input type='submit' name='Load'/></td>
+                    <?php
+                    if ($student_id == 0) {
+                        ?>
+                        <td><input type='submit' name='Load'/></td>
+                        <?php
+                    }
+                    ?>
                     <td/>
                     <?php
                     if ($student_id == 0) {
@@ -364,22 +389,6 @@
                     }
                     ?>
                 </tr>
-                <?php
-                if ($student_id != 0) {
-                    ?>
-                    <tr>
-                        <td></td>
-                        <td>
-                            <p>
-                                <input type="button" value="Download Student Plan"
-                                       onclick="window.location.href='student-print.php?cwu_id=<?php echo $cwu_id; ?>&program_id=<?php echo $program_id; ?>&pdf=1';">
-                            </p>
-                        </td>
-
-                    </tr>
-                    <?php
-                }
-                ?>
                 <?php
                 if ($student_id == 0) {
                     ?>
@@ -398,6 +407,84 @@
                 ?>
             </table>
         </form>
+
+        <?php
+        if ($student_id != 0) {
+            ?>
+            <form action='student.php#student_programs' method='post' id='student_programs'>
+                <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
+                <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
+
+
+                <h2>Student Programs</h2>
+
+                <table class='input'>
+                    <tr class='header'>
+                        <td>Program</td>
+                        <td>Advisor</td>
+                        <td style='text-align:center;'>Remove</td>
+                        <td style='text-align:center;'>Confirm Removal</td>
+                    </tr>
+                    <?php
+                    foreach ($programs as $program_data) {
+                        ?>
+                        <tr>
+                            <td><?php echo($program_data['program_name']); ?></td>
+                            <td>
+                                <?php echo(array_menu("\t\t\t\t", $all_users, "advisor-program-" . $program_data['program_id'], $program_data['advisor_id'], false)); ?>
+                            </td>
+                            <td style='text-align:center;'>
+                                <?php echo(checkbox("", 'remove-program-' . $program_data['program_id'], false)); ?>
+                            </td>
+                            <td style='text-align:center;'>
+                                <?php echo(checkbox("", 'remove-confirm-program-' . $program_data['program_id'], false)); ?>
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                    <tr class='header'>
+                        <td>Non-STEM Majors</td>
+                        <td colspan='3'><input type='text' name='non-stem-programs' size='50'
+                                               value='<?php echo($non_stem_majors); ?>'/></td>
+
+                    </tr>
+                    <?php
+                    if (!array_key_exists($program_id, $programs)) {
+                        ?>
+                        <tr class='header'>
+                            <td>Add Program</td>
+                            <td/>
+                            <td>Confirm</td>
+                            <td/>
+                        </tr>
+                        <tr>
+                            <td>
+                                <?php echo($program_name); ?>
+                            </td>
+                            <td>
+                                <?php echo(array_menu("\t\t\t\t", $all_users, "add-advisor", $user_id, false)); ?>
+                            </td>
+                            <td style='text-align:center;'>
+                                <?php echo(checkbox("", "add-program-$program_id", false)); ?>
+                            </td>
+                            <td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                    <tr>
+                        <td/>
+                        <td colspan='3'><input type='submit' name='update_program' value='Update Program Information'></td>
+                    </tr>
+                </table>
+
+            </form>
+            <?php
+        }
+        ?>
+
+
         <?php
         if ($student_id != 0) {
             ?>
@@ -481,26 +568,23 @@
     <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
     <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
 
-    <h2>Student Plan</h2>
-
     <table class='schedule'>
-    <?php
-    if ($program_id != 0) {
-        ?>
-        <tr class='header'>
-            <td colspan='2'/>
-            <td colspan='2'>
-                Fill Template
-                <?php echo(array_menu("\t\t\t\t", $all_templates, 'template_id', 0, false)); ?>
-                starting Fall
-                <?php echo(array_menu("\t\t\t\t", all_years(), 'template_year', $start_year, false)); ?>
-                <input type='submit' name='fill_template' value='Fill Classes'>
+    <tr class='header'>
+        <td>
+            <h2>Student Plan</h2>
+        </td>
 
-            </td>
-        </tr>
-        <?php
-    }
-    ?>
+        <td colspan='4'>
+            Fill Template
+            <?php echo(array_menu("\t\t\t\t", $all_templates, 'template_id', 0, false)); ?>
+            starting Fall
+            <?php echo(array_menu("\t\t\t\t", all_years(), 'template_year', $start_year, false)); ?>
+            <input type='submit' name='fill_template' value='Fill Classes'>
+
+        </td>
+
+    </tr>
+
     <tr class='header'>
         <td colspan='2'>
             Fall
@@ -868,81 +952,6 @@
             ?>
 
         </form>
-    <?php
-    if ($student_id != 0) {
-        ?>
-        <form action='student.php#student_programs' method='post' id='student_programs'>
-            <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
-            <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
-
-
-            <h2>Student Programs</h2>
-
-            <table class='input'>
-                <tr class='header'>
-                    <td>Program</td>
-                    <td>Advisor</td>
-                    <td style='text-align:center;'>Remove</td>
-                    <td style='text-align:center;'>Confirm Removal</td>
-                </tr>
-                <?php
-                foreach ($programs as $program_data) {
-                    ?>
-                    <tr>
-                        <td><?php echo($program_data['program_name']); ?></td>
-                        <td>
-                            <?php echo(array_menu("\t\t\t\t", $all_users, "advisor-program-" . $program_data['program_id'], $program_data['advisor_id'], false)); ?>
-                        </td>
-                        <td style='text-align:center;'>
-                            <?php echo(checkbox("", 'remove-program-' . $program_data['program_id'], false)); ?>
-                        </td>
-                        <td style='text-align:center;'>
-                            <?php echo(checkbox("", 'remove-confirm-program-' . $program_data['program_id'], false)); ?>
-                        </td>
-                    </tr>
-                    <?php
-                }
-                ?>
-                <tr class='header'>
-                    <td>Non-STEM Majors</td>
-                    <td colspan='3'><input type='text' name='non-stem-programs' size='50'
-                                           value='<?php echo($non_stem_majors); ?>'/></td>
-
-                </tr>
-                <?php
-                if (!array_key_exists($program_id, $programs)) {
-                    ?>
-                    <tr class='header'>
-                        <td>Add Program</td>
-                        <td/>
-                        <td>Confirm</td>
-                        <td/>
-                    </tr>
-                    <tr>
-                        <td>
-                            <?php echo($program_name); ?>
-                        </td>
-                        <td>
-                            <?php echo(array_menu("\t\t\t\t", $all_users, "add-advisor", $user_id, false)); ?>
-                        </td>
-                        <td style='text-align:center;'>
-                            <?php echo(checkbox("", "add-program-$program_id", false)); ?>
-                        </td>
-                        <td>
-                    </tr>
-                    <?php
-                }
-                ?>
-                <tr>
-                    <td/>
-                    <td colspan='3'><input type='submit' name='update_program' value='Update Program Information'></td>
-                </tr>
-            </table>
-
-        </form>
-        <?php
-    }
-    ?>
         <form action='student.php#notes' method='post' id='notes'>
             <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
             <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>

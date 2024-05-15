@@ -71,6 +71,10 @@ form {
 
 }
 
+#student_plan {
+    height: 200%;
+}
+
 body{
     background-color: var(--secondaryLightest);
     color: var(--headerColor);
