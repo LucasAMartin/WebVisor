@@ -202,7 +202,7 @@ echo(messages());
 echo(linkmenu('Class Information'));
 ?>
 <div class="content_container">
-    <h1 class="hidden">Class Information - CS XXX (Xcr)</h1>
+    <h1 class="hidden">SpacerSpacerSpacerSpacer</h1>
 
     <form action='class.php' method='post' id="select_class">
         <h2>Class Information<?php if ($name != '') {
