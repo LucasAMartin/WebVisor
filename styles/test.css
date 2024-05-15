@@ -392,6 +392,14 @@ div.messages
     background-color:LightGray;
 }
 
+.prereq-error input[type="search"]{
+    background-color: red;
+}
+
+.error input[type="search"]{
+    background-color: red;
+}
+
 @media only screen and (max-width: 72rem) {
     form {
         width: 100%;
