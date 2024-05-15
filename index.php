@@ -5,23 +5,22 @@
 	<link rel="stylesheet" type="text/css" href="styles/_style.css"><link rel="stylesheet" type="text/css" href="styles/navbar.css">
 
 
-<?php
+    <?php
     require_once __DIR__ . '/vendor/autoload.php';
 
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
 
     include_once("_html.php");
-	include_once("_sql.php");
-	
-	if (!get_user_info())
-	{
-		echo("<meta http-equiv='refresh' content='0; url=settings.php' />\n");
-		echo("</head>\n");
-		echo("</html>\n");
-		die();
-	}
-?>
+    include_once("_sql.php");
+
+    if (!get_user_info()) {
+        header('Location: settings.php');
+    } else {
+        header('Location: student.php');
+    }
+    exit;
+    ?>
 </head>
 <body>
 	<ul>
