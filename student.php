@@ -277,6 +277,54 @@
         $all_users = array('0' => '') + all_users();
 
     }
+
+    function prerequisites_scheduled_before_term($classes_by_term, $class_id_to_check, $year_of_class, $term_of_class, $all_classes): array
+    {
+        $prerequisites = get_prereqs($class_id_to_check);
+        $missing_prereqs = [];
+
+        // Iterate over each prerequisite to check if it was taken before the class term
+        foreach ($prerequisites as $prereq) {
+            $prereq_met = false;
+
+            // Iterate through each year and term up to the year and term of the class
+            foreach ($classes_by_term as $year => $terms) {
+                // If we've reached the year of the class, only iterate up to the term before the class's term
+                $last_term = $year == $year_of_class ? $term_of_class - 1 : 4;
+
+                for ($term = 0; $term <= $last_term; ++$term) {
+                    if (isset($terms[$term])) {
+                        foreach ($terms[$term] as $class) {
+                            if ($class['class_id'] == $prereq['prerequisite_id']) {
+                                $prereq_met = true;
+                                break 3; // Exit both loops
+                            }
+                        }
+                    }
+                }
+
+                // Stop iterating through years once we reach the year of the class
+                if ($year == $year_of_class) {
+                    break;
+                }
+            }
+
+            // If prerequisite was not met, add it to the missing prerequisites array
+            if (!$prereq_met) {
+                $missing_prereqs[] = $all_classes[$prereq['prerequisite_id']];
+            }
+        }
+
+        // If there are missing prerequisites, return false and the list of missing prerequisites
+        if (!empty($missing_prereqs)) {
+            return [false, $missing_prereqs];
+        }
+
+        // All prerequisites met
+        return [true, $missing_prereqs];
+    }
+
+
     ?>
     <title>Student Plan<?php if ($name != '') echo(" - $name"); ?></title>
     <link rel="stylesheet" type="text/css" href="styles/test.css">
@@ -485,275 +533,86 @@
         }
         ?>
 
-
-        <?php
-        if ($student_id != 0) {
-            ?>
-            <form action='student.php#student_information' method='post' id='student_information'>
-                <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
-                <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
-
-                <h2>Student Information</h2>
-
-                <table class='input'>
-                    <tr></tr>
-                    <tr>
-                        <td>First:</td>
-                        <td><input type='text' class='nameid' name='update_first' value='<?php echo($first); ?>'/></td>
-                        <td/>
-                        <td>Postbaccalaureate:</td>
-                        <td><?php echo(checkbox('', 'update_postbaccalaureate', $postbaccalaureate == $YES)); ?></td>
-                    </tr>
-                    <tr>
-                        <td>Last:</td>
-                        <td><input type='text' class='nameid' name='update_last' value='<?php echo($last); ?>'/></td>
-                        <td/>
-                        <td>Withdrawing<br/>from another major:</td>
-                        <td><?php echo(checkbox('', 'update_withdrawing', $withdrawing == $YES)); ?></td>
-                    </tr>
-                    <tr>
-                        <td>CWU ID:</td>
-                        <td><input type='text' class='nameid' name='update_cwu_id' value='<?php echo($cwu_id); ?>'/>
-                        </td>
-                        <td/>
-                        <td>Veteran's Benefits:</td>
-                        <td><?php echo(checkbox('', 'update_veterans_benefits', $veterans_benefits == $YES)); ?></td>
-                    </tr>
-                    <tr>
-                        <td>Email:</td>
-                        <td><input type='text' class='email' name='update_email' value='<?php echo($email); ?>'/>@cwu.edu
-                        </td>
-                        <td/>
-                        <td>Active:</td>
-                        <td><?php echo(checkbox('', 'update_active', $active == $YES)); ?></td>
-                    </tr>
-                    <tr>
-                        <td>Phone:</td>
-                        <td><input type='text' class='phone' name='update_phone' value='<?php echo($phone); ?>'/></td>
-                        <td/>
-                        <td>International Student:</td>
-                        <td><?php echo(checkbox('', 'update_international_student', $international_student == $YES)); ?></td>
-                    </tr>
-                    <tr>
-                        <td>Address:</td>
-                        <td rowspan='4'><textarea class='address' rows='5'
-                                                  name='update_address'><?php echo($address); ?></textarea></td>
-                        <td/>
-                        <td>Transfer Student:</td>
-                        <td><?php echo(checkbox('', 'update_transfer_student', $transfer_student == $YES)); ?></td>
-                    </tr>
-                    <tr>
-                        <td colspan='5'/>
-                    </tr>
-                    <tr>
-                        <td colspan='5'/>
-                    </tr>
-                    <tr>
-                        <td colspan='5'/>
-                    </tr>
-                    <tr>
-                        <td/>
-                        <td><input type='submit' name='update_student' value='Update Student Info'/></td>
-                        <td colspan='3'/>
-                    </tr>
-                </table>
-
-            </form>
-            <?php
-        }
-        ?>
         <?php
         if ($student_id != 0) {
         ?>
-    <form action='student.php#student_plan' method='post' id='student_plan'>
-    <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
-    <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
+        <form action='student.php#student_information' method='post' id='student_information'>
+            <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
+            <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
 
-    <table class='schedule'>
-    <tr class='header'>
-        <td>
-            <h2>Student Plan</h2>
-        </td>
+            <h2>Student Information</h2>
 
-        <td colspan='4'>
-            Fill Template
-            <?php echo(array_menu("\t\t\t\t", $all_templates, 'template_id', 0, false)); ?>
-            starting Fall
-            <?php echo(array_menu("\t\t\t\t", all_years(), 'template_year', $start_year, false)); ?>
-            <input type='submit' name='fill_template' value='Fill Classes'>
-
-        </td>
-
-    </tr>
-
-    <tr class='header'>
-        <td colspan='2'>
-            Fall
-            <?php echo(array_menu("\t\t\t\t", $all_years, 'start_year', $start_year, true)); ?>
-            &ndash;
-            Summer
-            <?php echo(array_menu("\t\t\t\t", $all_years, 'end_year', $end_year, true)); ?>
-        </td>
-        <td colspan='2'/>
-    </tr>
-    <?php
-    foreach ($classes as $year => $terms) {
-    if ($year == 0) {
-        continue;
-    }
-    $next_year = $year + 1;
-
-    for ($term_number = 1; $term_number < 5; ++$term_number) {
-        // Determine the term name based on the term_number
-        $term_name = match ($term_number) {
-            1 => 'fall',
-            2 => 'winter',
-            3 => 'spring',
-            4 => 'summer',
-            default => '',
-        };
-        $term_classes = $terms[$term_number];
-        $slots = max(count($term_classes) + 1, 6);
-
-        echo "<td valign='top'>";
-        /*
-            echo "<pre>";
-            print_r($classes);
-            print_r($terms);
-            print_r($term_classes);
-            echo "</pre>";
-        */
-
-        $term_credits = 0;
-        for ($j = 0; $j < $slots; ++$j) {
-            if (isset($term_classes[$j]) && array_key_exists('class_id', $term_classes[$j])) {
-                $class_id = $term_classes[$j]['class_id'];
-                $student_class_id = $term_classes[$j]['student_class_id'];
-            } else {
-                $class_id = 0;
-                $student_class_id = 0;
-            }
-            ?>
-            <tr class='header'>
-                <td>Fall <?php echo($year); ?></td>
-                <td>Winter <?php echo($next_year); ?></td>
-                <td>Spring <?php echo($next_year); ?></td>
-                <td>Summer <?php echo($next_year); ?></td>
-            </tr>
-            <tr>
-                <?php
-
-                for ($term_number = 1; $term_number < 5; ++$term_number) {
-                    if ($term_number == 1) {
-                        $term_name = 'fall';
-                    } else if ($term_number == 2) {
-                        $term_name = 'winter';
-                    } else if ($term_number == 3) {
-                        $term_name = 'spring';
-                    } else if ($term_number == 4) {
-                        $term_name = 'summer';
-                    }
-                    $term_classes = $terms[$term_number];
-                    $slots = max(count($term_classes) + 1, 6);
-                    ?>
-                    <td valign='top'>
-                        <?php
-                        /*
-                            echo "<pre>";
-                            print_r($classes);
-                            print_r($terms);
-                            print_r($term_classes);
-                            echo "</pre>";
-                        */
-                        $term_credits = 0;
-                        for ($j = 0; $j < $slots; ++$j) {
-                            if (isset($term_classes[$j]) && array_key_exists('class_id', $term_classes[$j])) {
-                                $class_id = $term_classes[$j]['class_id'];
-                                $student_class_id = $term_classes[$j]['student_class_id'];
-                            } else {
-                                $class_id = 0;
-                                $student_class_id = 0;
-                            }
-
-                            $class_info = get_class_info($class_id);
-                            $style = "";
-                            $title = "";
-                            if ($class_info !== null) {
-                                //Check for Prereqs
-                                [$prereqs_met, $missing_prereqs] = prerequisites_scheduled_before_term(/*$classes_by_term*/ $plan['by term'], $class_id, $year, $term_number, $all_classes);
-                                if (!$prereqs_met) {
-                                    $missing_prereqs_list = implode(', ', $missing_prereqs); // Convert missing prereqs to a comma-separated list
-                                    $style = " class='prereq-error'";
-                                    $title = " title='Missing prerequisites: $missing_prereqs_list'";
-                                    $errors[] = [
-                                        'message' => "Missing prerequisites: <strong>$missing_prereqs_list</strong> for <strong>$all_classes[$class_id]</strong>",
-                                        'type' => 'missing-prereq'
-                                    ];
-
-                                } elseif ($class_id != 0 && $class_info[$term_name] != $YES) {
-                                    $style = " class='error'";
-                                    $title = " title='Class not offered this term.'";
-                                    // When you detect a class not offered error
-                                    $errors[] = [
-                                        'message' => " <strong>$all_classes[$class_id]</strong> not offered in <strong>$term_name</strong>",
-                                        'type' => 'class-not-offered'
-                                    ];
-
-                                } else {
-                                    $style = "";
-                                    $title = "";
-                                }
-                                $term_credits += $class_info['credits'];
-                                $is_elective = $class_id != 0 && !array_key_exists($class_id, $required_classes) && $program_id != 0 && $program_elective_credits > 0 && $student_advisor && key_exists($class_id, get_program_classes($program_id));
-                                $check_elective = key_exists($student_class_id, $electives);
-                            } else {
-                                // Handle case when class_info is null, perhaps set default values or skip
-                                $is_elective = false;
-                            }
-
-                            $slot_name = "$year$term_number-$j";
-                            $class_menu = "<span$style$title>" . auto_text("\t\t\t\t", $all_classes, "slot-$slot_name", $class_id) . "</span>";
-                            $elective_checkbox = $is_elective ? checkbox("\t\t\t\t", "elective-$slot_name", $check_elective) . "\n" : '';
-                            echo("<span style='white-space:nowrap;'>$class_menu$elective_checkbox</span>");
-                            ?>
-                            <br/>
-                            <?php
-                        }
-                        ?>
-                        Credits: <?php echo($term_credits); ?>
+            <table class='input'>
+                <tr></tr>
+                <tr>
+                    <td>First:</td>
+                    <td><input type='text' class='nameid' name='update_first' value='<?php echo($first); ?>'/></td>
+                    <td/>
+                    <td>Postbaccalaureate:</td>
+                    <td><?php echo(checkbox('', 'update_postbaccalaureate', $postbaccalaureate == $YES)); ?></td>
+                </tr>
+                <tr>
+                    <td>Last:</td>
+                    <td><input type='text' class='nameid' name='update_last' value='<?php echo($last); ?>'/></td>
+                    <td/>
+                    <td>Withdrawing<br/>from another major:</td>
+                    <td><?php echo(checkbox('', 'update_withdrawing', $withdrawing == $YES)); ?></td>
+                </tr>
+                <tr>
+                    <td>CWU ID:</td>
+                    <td><input type='text' class='nameid' name='update_cwu_id' value='<?php echo($cwu_id); ?>'/>
                     </td>
-                    <?php
-                }
-                ?>
-            </tr>
-            <?php
-        }
-    }
-    }
-        ?>
-        <tr class='footer'>
-            <td><input type='submit' name='update_plan' value='Update Student Plan'/></td>
-            <td colspan='3'>
-                New Class Name:
-                <input type='text' name='new_name'/>
-                New Class Credits:
-                <?php echo(array_menu("\t\t\t\t", all_credits(), 'new_credits', '4')); ?>
-            </td>
-        </tr>
-        <tr class='footer'>
-            <td/>
-            <td colspan='2'><input type='submit' name='nuke_plan' value='Clear Student Plan'/> Confirmation
-                <input
-                    type='checkbox' name='launch_code' value='launch_code'/></td>
-            <td/>
-        </tr>
-        </table>
+                    <td/>
+                    <td>Veteran's Benefits:</td>
+                    <td><?php echo(checkbox('', 'update_veterans_benefits', $veterans_benefits == $YES)); ?></td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td><input type='text' class='email' name='update_email' value='<?php echo($email); ?>'/>@cwu.edu
+                    </td>
+                    <td/>
+                    <td>Active:</td>
+                    <td><?php echo(checkbox('', 'update_active', $active == $YES)); ?></td>
+                </tr>
+                <tr>
+                    <td>Phone:</td>
+                    <td><input type='text' class='phone' name='update_phone' value='<?php echo($phone); ?>'/></td>
+                    <td/>
+                    <td>International Student:</td>
+                    <td><?php echo(checkbox('', 'update_international_student', $international_student == $YES)); ?></td>
+                </tr>
+                <tr>
+                    <td>Address:</td>
+                    <td rowspan='4'><textarea class='address' rows='5'
+                                              name='update_address'><?php echo($address); ?></textarea></td>
+                    <td/>
+                    <td>Transfer Student:</td>
+                    <td><?php echo(checkbox('', 'update_transfer_student', $transfer_student == $YES)); ?></td>
+                </tr>
+                <tr>
+                    <td colspan='5'/>
+                </tr>
+                <tr>
+                    <td colspan='5'/>
+                </tr>
+                <tr>
+                    <td colspan='5'/>
+                </tr>
+                <tr>
+                    <td/>
+                    <td><input type='submit' name='update_student' value='Update Student Info'/></td>
+                    <td colspan='3'/>
+                </tr>
+            </table>
 
         </form>
         <?php
-    }
-    ?>
+        }
+        ?>
 
+        <?php
+        if ($student_id != 0) {
+        ?>
         <form action='student.php#program_requirements' method='post' id='program_requirements'>
             <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
             <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
@@ -951,6 +810,215 @@
             ?>
 
         </form>
+        <?php
+        }
+        ?>
+
+        <?php
+        if ($student_id != 0) {
+            ?>
+            <form action='student.php#student_plan' method='post' id='student_plan'>
+                <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
+                <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
+
+                <table class='schedule'>
+                    <tr class='header'>
+                        <td>
+                            <h2>Student Plan</h2>
+                        </td>
+
+                        <td colspan='4'>
+                            Fill Template
+                            <?php echo(array_menu("\t\t\t\t", $all_templates, 'template_id', 0, false)); ?>
+                            starting Fall
+                            <?php echo(array_menu("\t\t\t\t", all_years(), 'template_year', $start_year, false)); ?>
+                            <input type='submit' name='fill_template' value='Fill Classes'>
+
+                        </td>
+
+                    </tr>
+
+                    <tr class='header'>
+                        <td colspan='2'>
+                            Fall
+                            <?php echo(array_menu("\t\t\t\t", $all_years, 'start_year', $start_year, true)); ?>
+                            &ndash;
+                            Summer
+                            <?php echo(array_menu("\t\t\t\t", $all_years, 'end_year', $end_year, true)); ?>
+                        </td>
+                        <td colspan='2'/>
+                    </tr>
+                    <?php
+                    foreach ($classes as $year => $terms) {
+                        if ($year == 0) {
+                            continue;
+                        }
+                        $next_year = $year + 1;
+
+                        for ($term_number = 1; $term_number < 5; ++$term_number) {
+                            // Determine the term name based on the term_number
+                            $term_name = match ($term_number) {
+                                1 => 'fall',
+                                2 => 'winter',
+                                3 => 'spring',
+                                4 => 'summer',
+                                default => '',
+                            };
+                            $term_classes = $terms[$term_number];
+                            $slots = max(count($term_classes) + 1, 6);
+
+                            echo "<td valign='top'>";
+                            /*
+                                echo "<pre>";
+                                print_r($classes);
+                                print_r($terms);
+                                print_r($term_classes);
+                                echo "</pre>";
+                            */
+
+                            $term_credits = 0;
+                            for ($j = 0; $j < $slots; ++$j) {
+                                if (isset($term_classes[$j]) && array_key_exists('class_id', $term_classes[$j])) {
+                                    $class_id = $term_classes[$j]['class_id'];
+                                    $student_class_id = $term_classes[$j]['student_class_id'];
+                                } else {
+                                    $class_id = 0;
+                                    $student_class_id = 0;
+                                }
+                                ?>
+                                <tr class='header'>
+                                    <td>Fall <?php echo($year); ?></td>
+                                    <td>Winter <?php echo($next_year); ?></td>
+                                    <td>Spring <?php echo($next_year); ?></td>
+                                    <td>Summer <?php echo($next_year); ?></td>
+                                </tr>
+                                <tr>
+                                    <?php
+
+                                    for ($term_number = 1; $term_number < 5; ++$term_number) {
+                                        if ($term_number == 1) {
+                                            $term_name = 'fall';
+                                        } else if ($term_number == 2) {
+                                            $term_name = 'winter';
+                                        } else if ($term_number == 3) {
+                                            $term_name = 'spring';
+                                        } else if ($term_number == 4) {
+                                            $term_name = 'summer';
+                                        }
+                                        $term_classes = $terms[$term_number];
+                                        $slots = max(count($term_classes) + 1, 6);
+                                        ?>
+                                        <td valign='top'>
+                                            <?php
+                                            /*
+                                                echo "<pre>";
+                                                print_r($classes);
+                                                print_r($terms);
+                                                print_r($term_classes);
+                                                echo "</pre>";
+                                            */
+                                            $term_credits = 0;
+                                            for ($j = 0; $j < $slots; ++$j) {
+                                                if (isset($term_classes[$j]) && array_key_exists('class_id', $term_classes[$j])) {
+                                                    $class_id = $term_classes[$j]['class_id'];
+                                                    $student_class_id = $term_classes[$j]['student_class_id'];
+                                                } else {
+                                                    $class_id = 0;
+                                                    $student_class_id = 0;
+                                                }
+
+                                                $class_info = get_class_info($class_id);
+                                                $style = "";
+                                                $title = "";
+                                                if ($class_info !== null) {
+                                                    //Check for Prereqs
+                                                    [$prereqs_met, $missing_prereqs] = prerequisites_scheduled_before_term(/*$classes_by_term*/ $plan['by term'], $class_id, $year, $term_number, $all_classes);
+                                                    if (!$prereqs_met) {
+                                                        $missing_prereqs_list = implode(', ', $missing_prereqs); // Convert missing prereqs to a comma-separated list
+                                                        $style = " class='prereq-error'";
+                                                        $title = " title='Missing prerequisites: $missing_prereqs_list'";
+                                                        $errors[] = [
+                                                            'message' => "Missing prerequisites: <strong>$missing_prereqs_list</strong> for <strong>$all_classes[$class_id]</strong>",
+                                                            'type' => 'missing-prereq'
+                                                        ];
+
+                                                    } elseif ($class_id != 0 && $class_info[$term_name] != $YES) {
+                                                        $style = " class='error'";
+                                                        $title = " title='Class not offered this term.'";
+                                                        // When you detect a class not offered error
+                                                        $errors[] = [
+                                                            'message' => " <strong>$all_classes[$class_id]</strong> not offered in <strong>$term_name</strong>",
+                                                            'type' => 'class-not-offered'
+                                                        ];
+
+                                                    } else {
+                                                        $style = "";
+                                                        $title = "";
+                                                    }
+                                                    $term_credits += $class_info['credits'];
+                                                    $is_elective = $class_id != 0 && !array_key_exists($class_id, $required_classes) && $program_id != 0 && $program_elective_credits > 0 && $student_advisor && key_exists($class_id, get_program_classes($program_id));
+                                                    $check_elective = key_exists($student_class_id, $electives);
+                                                } else {
+                                                    // Handle case when class_info is null, perhaps set default values or skip
+                                                    $is_elective = false;
+                                                }
+
+                                                $slot_name = "$year$term_number-$j";
+                                                $class_menu = "<span$style$title>" . auto_text("\t\t\t\t", $all_classes, "slot-$slot_name", $class_id) . "</span>";
+                                                $elective_checkbox = $is_elective ? checkbox("\t\t\t\t", "elective-$slot_name", $check_elective) . "\n" : '';
+                                                echo("<span style='white-space:nowrap;'>$class_menu$elective_checkbox</span>");
+                                                ?>
+                                                <br/>
+                                                <?php
+                                            }
+                                            ?>
+                                            Credits: <?php echo($term_credits); ?>
+                                        </td>
+                                        <?php
+                                    }
+                                    ?>
+                                </tr>
+                                <?php
+                            }
+                        }
+                    }
+                    ?>
+                    <tr class='footer'>
+                        <td><input type='submit' name='update_plan' value='Update Student Plan'/></td>
+                        <td colspan='3'>
+                            New Class Name:
+                            <input type='text' name='new_name'/>
+                            New Class Credits:
+                            <?php echo(array_menu("\t\t\t\t", all_credits(), 'new_credits', '4')); ?>
+                        </td>
+                    </tr>
+                    <tr class='footer'>
+                        <td/>
+                        <td colspan='2'><input type='submit' name='nuke_plan' value='Clear Student Plan'/> Confirmation
+                            <input
+                                type='checkbox' name='launch_code' value='launch_code'/></td>
+                        <td/>
+                    </tr>
+                </table>
+
+            </form>
+            <?php
+        }
+        ?>
+
+        <?php
+        if ($student_id != 0) {
+            ?>
+            <form action='student.php#general_education' method='post' id='general_education'>
+                <h2>Gen Ed Requirements</h2>
+            </form>
+            <?php
+        }
+        ?>
+
+        <?php
+        if ($student_id != 0) {
+        ?>
         <form action='student.php#notes' method='post' id='notes'>
             <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
             <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
@@ -964,8 +1032,12 @@
                 </tr>
                 <tr>
                     <td/>
-                    <td><textarea name='note' cols='100' rows='10'></textarea></td>
+                    <td><textarea name='note' cols='60' rows='10'></textarea></td>
                 </tr>
+            </table>
+
+
+            <table class='input'>
                 <?php
                 foreach ($notes as $note_id => $tag_note) {
                     $tag = $tag_note['tag'];
@@ -1001,57 +1073,10 @@
                 }
                 ?>
             </table>
-
-            <?php
-            function prerequisites_scheduled_before_term($classes_by_term, $class_id_to_check, $year_of_class, $term_of_class, $all_classes): array
-            {
-                $prerequisites = get_prereqs($class_id_to_check);
-                $missing_prereqs = [];
-
-                // Iterate over each prerequisite to check if it was taken before the class term
-                foreach ($prerequisites as $prereq) {
-                    $prereq_met = false;
-
-                    // Iterate through each year and term up to the year and term of the class
-                    foreach ($classes_by_term as $year => $terms) {
-                        // If we've reached the year of the class, only iterate up to the term before the class's term
-                        $last_term = $year == $year_of_class ? $term_of_class - 1 : 4;
-
-                        for ($term = 0; $term <= $last_term; ++$term) {
-                            if (isset($terms[$term])) {
-                                foreach ($terms[$term] as $class) {
-                                    if ($class['class_id'] == $prereq['prerequisite_id']) {
-                                        $prereq_met = true;
-                                        break 3; // Exit both loops
-                                    }
-                                }
-                            }
-                        }
-
-                        // Stop iterating through years once we reach the year of the class
-                        if ($year == $year_of_class) {
-                            break;
-                        }
-                    }
-
-                    // If prerequisite was not met, add it to the missing prerequisites array
-                    if (!$prereq_met) {
-                        $missing_prereqs[] = $all_classes[$prereq['prerequisite_id']];
-                    }
-                }
-
-                // If there are missing prerequisites, return false and the list of missing prerequisites
-                if (!empty($missing_prereqs)) {
-                    return [false, $missing_prereqs];
-                }
-
-                // All prerequisites met
-                return [true, $missing_prereqs];
-            }
-
-            ?>
-
         </form>
+            <?php
+        }
+        ?>
         <script>
             $(document).ready(function () {
                 // Initialize Select2 on your student dropdown

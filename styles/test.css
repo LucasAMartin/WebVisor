@@ -71,8 +71,13 @@ form {
 
 }
 
-#student_plan {
-    height: 200%;
+#notes {
+    width: 100%;
+    display: flex;
+}
+
+#notes table tr td {
+    word-break: break-all;
 }
 
 body{
