@@ -322,17 +322,17 @@
                     <td>Inactive Students:</td>
                     <?php
                     if ($student_id != 0) {
-                    ?>
-                    <td>
-                        <p>
-                            <input type="button" value="Download Student Plan"
-                                   onclick="window.location.href='student-print.php?cwu_id=<?php echo $cwu_id; ?>&program_id=<?php echo $program_id; ?>&pdf=1';">
-                        </p>
-                    </td>
+                        ?>
+                        <td>
+                            <p>
+                                <input type="button" value="Download Student Plan"
+                                       onclick="window.location.href='student-print.php?cwu_id=<?php echo $cwu_id; ?>&program_id=<?php echo $program_id; ?>&pdf=1';">
+                            </p>
+                        </td>
 
-                <?php
-                }
-                ?>
+                        <?php
+                    }
+                    ?>
 
                     <?php
                     if ($student_id == 0) {
@@ -475,7 +475,8 @@
                     ?>
                     <tr>
                         <td/>
-                        <td colspan='3'><input type='submit' name='update_program' value='Update Program Information'></td>
+                        <td colspan='3'><input type='submit' name='update_program' value='Update Program Information'>
+                        </td>
                     </tr>
                 </table>
 
@@ -596,17 +597,13 @@
         <td colspan='2'/>
     </tr>
     <?php
-    foreach ($classes
-
-             as $year => $terms) {
+    foreach ($classes as $year => $terms) {
     if ($year == 0) {
         continue;
     }
     $next_year = $year + 1;
 
-    for ($term_number = 1;
-         $term_number < 5;
-         ++$term_number) {
+    for ($term_number = 1; $term_number < 5; ++$term_number) {
         // Determine the term name based on the term_number
         $term_name = match ($term_number) {
             1 => 'fall',
@@ -731,6 +728,8 @@
             </tr>
             <?php
         }
+    }
+    }
         ?>
         <tr class='footer'>
             <td><input type='submit' name='update_plan' value='Update Student Plan'/></td>
@@ -1004,9 +1003,6 @@
             </table>
 
             <?php
-            }
-            } // if ($student_id != 0)
-
             function prerequisites_scheduled_before_term($classes_by_term, $class_id_to_check, $year_of_class, $term_of_class, $all_classes): array
             {
                 $prerequisites = get_prereqs($class_id_to_check);
