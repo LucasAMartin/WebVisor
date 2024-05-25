@@ -22,7 +22,7 @@
 	//! @todo https://stackoverflow.com/questions/1581610/how-can-i-store-my-users-passwords-safely
 function get_user_info($login = '', $password = '', $setCookies = true)
 {
-	// Use environment variables for configuration
+	// Use environment variables for configuration.
 	$host = $_ENV['DB_HOST'];
 	$port = $_ENV['DB_PORT'];
 	$user = $_ENV['DB_USER'];
