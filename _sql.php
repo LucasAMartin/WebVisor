@@ -2,23 +2,23 @@
 	require_once __DIR__ . '/vendor/autoload.php';
 	$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 	$dotenv->load();
-//-----------------------------------------------------	
+//-----------------------------------------------------
 //! DATABASE ACCESS
-//-----------------------------------------------------	
+//-----------------------------------------------------
 	$link = null;
 	function add_sql_message($message)
 	{
 		global $PRINT_SQL;
 		if ($PRINT_SQL)
 		{
-			add_message("<div class='sql'>$message</div>");		
+			add_message("<div class='sql'>$message</div>");
 		}
 		else
 		{
 			echo("<!-- $message -->");
 		}
 	}
-	
+
 	//! @todo https://stackoverflow.com/questions/1581610/how-can-i-store-my-users-passwords-safely
 function get_user_info($login = '', $password = '', $setCookies = true)
 {
@@ -289,7 +289,7 @@ function all_users()
 	{
 			$query_string = "
 			INSERT INTO
-				Journal(user_id, major_id, note)
+				journal(user_id, major_id, note)
 			VALUES
 				($user_id, '$note', $major_id)
 			;";
@@ -1785,15 +1785,15 @@ GROUP BY
 		$student_info = array();
 		if ($id != 0)
 		{
-			$where = "Students.id=$id";
+			$where = "students.id=$id";
 		}
 		else if ($cwu_id != 0)
 		{
-			$where = "Students.cwu_id=$cwu_id";
+			$where = "students.cwu_id=$cwu_id";
 		}
 		else if ($email != '')
 		{
-			$where = "Students.email='$email'";
+			$where = "students.email='$email'";
 		}
 
 		$query_string = "
@@ -2737,7 +2737,7 @@ ORDER BY
 ;";
 
 		$result = my_query($query_string, false);
-		
+
 		$enrollments = array();
 		while ($row = mysqli_fetch_assoc($result))
 		{
@@ -2747,12 +2747,12 @@ ORDER BY
 			{
 				$enrollments[$class_id] = array('name' => $row['name_credits'], 'enrollment' => array());
 			}
-			$enrollments[$class_id]['enrollment'][$term_number] = $row['enrollment']; 
+			$enrollments[$class_id]['enrollment'][$term_number] = $row['enrollment'];
 		}
-		
+
 		return $enrollments;
 	}
-	
+
 	function get_enrollments_by_program($year, $program_id)
 	{
 		global $YES;
@@ -2760,7 +2760,7 @@ ORDER BY
 		$year2 = 10 * $year + 2;
 		$year3 = 10 * $year + 3;
 		$year4 = 10 * $year + 4;
-	
+
 		$query_string = "
 	SELECT
 		c.id,
@@ -2791,9 +2791,9 @@ ORDER BY
 		c.name ASC,
 		sc.term
 	;";
-	
+
 		$result = my_query($query_string, false);
-		
+
 		$enrollments = array();
 		while ($row = mysqli_fetch_assoc($result))
 		{
@@ -2803,11 +2803,11 @@ ORDER BY
 			{
 				$enrollments[$class_id] = array('name' => $row['name_credits'], 'enrollment' => array());
 			}
-			$enrollments[$class_id]['enrollment'][$term_number] = $row['enrollment']; 
+			$enrollments[$class_id]['enrollment'][$term_number] = $row['enrollment'];
 		}
-		
+
 		return $enrollments;
 	}
-	
+
 
 ?>
