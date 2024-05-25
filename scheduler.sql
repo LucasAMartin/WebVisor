@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS scheduler;
 CREATE DATABASE scheduler;
 USE scheduler;
 
-CREATE TABLE Classes (
+CREATE TABLE classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     title VARCHAR(255) DEFAULT '\'\'' NOT NULL,
@@ -15,14 +15,14 @@ CREATE TABLE Classes (
     CONSTRAINT uq_Class_name_credit UNIQUE (name , credits)
 )  ENGINE=INNODB;
 
-CREATE TABLE Majors (
+CREATE TABLE majors (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(256) DEFAULT '' NOT NULL,
     active ENUM('Yes', 'No') DEFAULT 'Yes' NOT NULL,
     CONSTRAINT uq_Major_name UNIQUE (name)
 )  ENGINE=INNODB;
 
-CREATE TABLE Prerequisites (
+CREATE TABLE prerequisites (
     id INT AUTO_INCREMENT PRIMARY KEY,
     class_id INT NOT NULL,
     prerequisite_id INT NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE Prerequisites (
         ON UPDATE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Programs (
+CREATE TABLE programs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     major_id INT DEFAULT 0 NOT NULL,
     year INT NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE Programs (
         ON UPDATE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Checklists (
+CREATE TABLE checklists (
     id INT AUTO_INCREMENT PRIMARY KEY,
     program_id INT NOT NULL,
     sequence INT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE Checklists (
         ON UPDATE CASCADE ON DELETE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Program_Classes (
+CREATE TABLE program_classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     program_id INT NOT NULL,
     class_id INT NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE Program_Classes (
         ON UPDATE CASCADE ON DELETE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Replacement_Classes (
+CREATE TABLE replacement_classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     program_id INT NOT NULL,
     required_id INT NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE Replacement_Classes (
         ON UPDATE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Students (
+CREATE TABLE students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     first VARCHAR(256) DEFAULT '\'\'' NOT NULL,
     last VARCHAR(256) DEFAULT '\'\'' NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE Students (
     CONSTRAINT uq_Student_email UNIQUE (email)
 )  ENGINE=INNODB;
 
-CREATE TABLE Student_Checklists (
+CREATE TABLE student_checklists (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT NOT NULL,
     checklist_id INT NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE Student_Checklists (
         ON UPDATE CASCADE ON DELETE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Student_Classes (
+CREATE TABLE student_classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT NOT NULL,
     class_id INT NOT NULL,
@@ -140,7 +140,7 @@ CREATE TABLE Student_Classes (
         ON UPDATE CASCADE ON DELETE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Electives (
+CREATE TABLE electives (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_class_id INT NOT NULL,
     program_id INT NOT NULL,
@@ -152,7 +152,7 @@ CREATE TABLE Electives (
         ON UPDATE CASCADE ON DELETE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Templates (
+CREATE TABLE templates (
     id INT AUTO_INCREMENT PRIMARY KEY,
     program_id INT NOT NULL,
     name VARCHAR(255) DEFAULT '' NOT NULL,
@@ -162,7 +162,7 @@ CREATE TABLE Templates (
         ON UPDATE CASCADE ON DELETE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Template_Classes (
+CREATE TABLE template_classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     template_id INT NOT NULL,
     class_id INT NOT NULL,
@@ -176,7 +176,7 @@ CREATE TABLE Template_Classes (
         ON UPDATE CASCADE ON DELETE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Users (
+CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     login VARCHAR(255) DEFAULT '' NOT NULL,
     password VARCHAR(255) DEFAULT '' NOT NULL,
@@ -191,7 +191,7 @@ CREATE TABLE Users (
         ON UPDATE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Journal (
+CREATE TABLE journal (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL ON UPDATE CURRENT_TIMESTAMP,
@@ -217,7 +217,7 @@ CREATE TABLE Journal (
         ON UPDATE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Notes (
+CREATE TABLE notes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT NOT NULL,
     datetime DATETIME NOT NULL,
@@ -232,7 +232,7 @@ CREATE TABLE Notes (
         ON UPDATE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE Student_Programs (
+CREATE TABLE student_programs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT NOT NULL,
     program_id INT NOT NULL,
@@ -249,7 +249,7 @@ CREATE TABLE Student_Programs (
         ON UPDATE CASCADE
 )  ENGINE=INNODB;
 
-CREATE TABLE User_Programs (
+CREATE TABLE user_programs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     program_id INT NOT NULL,

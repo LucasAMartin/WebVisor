@@ -45,7 +45,7 @@ function get_user_info($login = '', $password = '', $setCookies = true)
 	}
 
 	// Prepare statement to prevent SQL injection
-	$stmt = $link->prepare("SELECT * FROM Users WHERE login = ?");
+	$stmt = $link->prepare("SELECT * FROM users WHERE login = ?");
 	$stmt->bind_param("s", $login);
 	$stmt->execute();
 	$result = $stmt->get_result();
@@ -119,7 +119,7 @@ function is_superuser($user_info)
 		global $link; // Assuming $link is your mysqli connection object
 
 		// Initialize the base query
-		$query_string = "UPDATE Users SET password=?, name=?";
+		$query_string = "UPDATE users SET password=?, name=?";
 		$types = "ss"; // Types for password and name
 		$params = [$password, $name]; // Parameters array
 
@@ -163,7 +163,7 @@ function all_users()
 		SELECT
 			*
 		FROM
-			Users
+			users
 		ORDER BY
 			name ASC
 		;";
@@ -240,20 +240,20 @@ function all_users()
 	{
 		$query_string = "
 		SELECT
-			Journal.date,
-			Users.name AS user_name,
-			CONCAT(Students.last, \", \", Students.first) AS student_name,
-			Classes.name AS class_name,
-			Programs.year AS program_name,
-			Majors.name AS major_name,
+			journal.date,
+			users.name AS user_name,
+			CONCAT(students.last, \", \", students.first) AS student_name,
+			classes.name AS class_name,
+			programs.year AS program_name,
+			majors.name AS major_name,
 			note
 		FROM 
-			Journal
-			LEFT JOIN Users ON Journal.user_id=Users.id
-			LEFT JOIN Students ON Journal.student_id=Students.id
-			LEFT JOIN Classes ON Journal.class_id=Classes.id
-			LEFT JOIN Programs ON Journal.program_id=Programs.id
-			LEFT JOIN Majors ON Journal.major_id=Majors.id
+			journal
+			LEFT JOIN users ON journal.user_id=users.id
+			LEFT JOIN students ON journal.student_id=students.id
+			LEFT JOIN classes ON Journal.class_id=classes.id
+			LEFT JOIN programs ON journal.program_id=programs.id
+			LEFT JOIN majors ON journal.major_id=majors.id
 		ORDER BY
 			date DESC
 		LIMIT
@@ -278,7 +278,7 @@ function all_users()
 	{
 			$query_string = "
 			INSERT INTO
-				Journal(user_id, note)
+				journal(user_id, note)
 			VALUES
 				($user_id, '$note')
 			;";
@@ -300,7 +300,7 @@ function all_users()
 	{
 			$query_string = "
 			INSERT INTO
-				Journal(user_id, program_id, note)
+				journal(user_id, program_id, note)
 			VALUES
 				($user_id, $program_id, '$note')
 			;";
@@ -311,7 +311,7 @@ function all_users()
 	{
 			$query_string = "
 			INSERT INTO
-				Journal(user_id, class_id, note)
+				journal(user_id, class_id, note)
 			VALUES
 				($user_id, $class_id, '$note')
 			;";
@@ -322,7 +322,7 @@ function all_users()
 	{
 			$query_string = "
 			INSERT INTO
-				Journal(user_id, student_id, note)
+				journal(user_id, student_id, note)
 			VALUES
 				($user_id, $student_id, '$note')
 			;";
@@ -339,7 +339,7 @@ function all_users()
 		SELECT
 			id, name, active
 		FROM
-			Majors
+			majors
 		ORDER BY
 			name
 		;";
@@ -359,7 +359,7 @@ function all_users()
 		global $link;
 		$query_string = "
 			INSERT INTO
-				Majors(name, active)
+				majors(name, active)
 			VALUES
 				('$name', '$active')
 			;";
@@ -381,7 +381,7 @@ function all_users()
 		global $link;
 		$query_string = "
 			UPDATE
-				Majors
+				majors
 			SET
 				name='$name',
 				active='$active'
@@ -403,7 +403,7 @@ function all_users()
 		SELECT
 			name, active
 		FROM
-			Majors
+			majors
 		WHERE id=$major_id
 		;";
 		$query_result = my_query($query_string, false);
@@ -425,7 +425,7 @@ function all_users()
 		SELECT
 			id
 		FROM
-			Programs
+			programs
 		WHERE
 			major_id=$major_id
 			AND
@@ -443,9 +443,9 @@ function all_users()
 		SELECT
 			name
 		FROM
-			Majors JOIN Programs ON Majors.id=Programs.major_id
+			majors JOIN programs ON majors.id=programs.major_id
 		WHERE
-			Programs.id=$program_id
+			programs.id=$program_id
 		;";
 		$query_result = my_query($query_string, false);
 		$row = mysqli_fetch_assoc($query_result);
@@ -463,11 +463,11 @@ function all_users()
 		global $link;
 		$query_string = "
 		SELECT
-			Programs.id,
+			programs.id,
 			name,
 			year
 		FROM
-			Programs JOIN Majors ON Programs.major_id=Majors.id
+			programs JOIN majors ON programs.major_id=majors.id
 		WHERE
 			name != ''
 		ORDER BY
@@ -487,7 +487,7 @@ function all_users()
 			SELECT
 				program_id
 			FROM
-				User_Programs
+				user_programs
 			WHERE
 				user_id=$user_id
 			ORDER BY
@@ -514,11 +514,11 @@ function all_users()
 	{
 		$query_string = "
 		SELECT
-			Programs.id, Programs.major_id, Majors.name, Programs.year, Programs.credits, Programs.elective_credits, Programs.active
+			programs.id, programs.major_id, majors.name, programs.year, programs.credits, programs.elective_credits, programs.active
 		FROM
-			Majors JOIN Programs ON Majors.id=Programs.major_id
+			majors JOIN programs ON majors.id=programs.major_id
 		WHERE
-			Programs.id=$program_id
+			programs.id=$program_id
 		;";
 		$query_result = my_query($query_string, false);
 
@@ -530,22 +530,22 @@ function all_users()
 	{
 		$query_string = "
 		SELECT
-			Students.last,
-			Students.first,
-			CONCAT(Students.last, \", \", Students.first) AS name,
-			Students.cwu_id,
-			Students.email,
-			Users.name AS advisor
+			students.last,
+			students.first,
+			CONCAT(students.last, \", \", students.first) AS name,
+			students.cwu_id,
+			students.email,
+			users.name AS advisor
 		FROM
-			Students
-			JOIN Student_Programs ON Students.id=Student_Programs.student_id
-			JOIN Users ON Student_Programs.user_id=Users.id
+			students
+			JOIN student_programs ON students.id=student_programs.student_id
+			JOIN users ON student_programs.user_id=users.id
 		WHERE
-			Student_Programs.program_id=$program_id
+			student_programs.program_id=$program_id
 			AND
-			Students.active='Yes'
+			students.active='Yes'
 		ORDER BY
-			Students.last, Students.first ASC
+			students.last, students.first ASC
 		";
 		$query_result = my_query($query_string, false);
 
@@ -567,7 +567,7 @@ function all_users()
 		{
 			$query_string = "
 			INSERT INTO
-				Programs(major_id, year)
+				programs(major_id, year)
 			VALUES
 				($major_id, $year)
 			;";
@@ -581,11 +581,11 @@ function all_users()
 		{
 			$query_string = "
 			INSERT INTO
-				Programs(major_id, year, credits, elective_credits)
+				programs(major_id, year, credits, elective_credits)
 			SELECT
 				$major_id, $year, credits, elective_credits
 			FROM
-				Programs
+				programs
 			WHERE
 				id=$template_id
 			;";
@@ -595,11 +595,11 @@ function all_users()
 
 			$query_string = "
 			INSERT INTO
-				Checklists(program_id, sequence, name)		
+				checklists(program_id, sequence, name)		
 			SELECT
 				$program_id, sequence, name
 			FROM
-				Checklists
+				checklists
 			WHERE
 				program_id=$template_id
 			;";
@@ -607,11 +607,11 @@ function all_users()
 
 			$query_string = "
 			INSERT INTO
-				Program_Classes(program_id, class_id, minimum_grade, sequence_no, template_qtr, template_year, required)
+				program_classes(program_id, class_id, minimum_grade, sequence_no, template_qtr, template_year, required)
 			SELECT
 				$program_id, class_id, minimum_grade, sequence_no, template_qtr, template_year, required
 			FROM
-				Program_Classes
+				program_classes
 			WHERE
 				program_id=$template_id
 			;";
@@ -619,11 +619,11 @@ function all_users()
 
 			$query_string = "
 			INSERT INTO
-				Replacement_Classes(program_id, required_id, replacement_id)
+				replacement_classes(program_id, required_id, replacement_id)
 			SELECT
 				$program_id, required_id, replacement_id
 			FROM
-				Replacement_Classes
+				replacement_classes
 			WHERE
 				program_id=$template_id
 			;";
@@ -644,7 +644,7 @@ function all_users()
 		global $link;
 		$query_string = "
 		UPDATE
-			Programs
+			programs
 		SET
 			major_id=$major_id,
 			year=$year,
@@ -676,7 +676,7 @@ function all_users()
 
 		$query_string = "
 		DELETE FROM
-			Program_Classes
+			program_classes
 		WHERE
 			program_id=$program_id
 		;";
@@ -685,7 +685,7 @@ function all_users()
 		foreach($core_ids as $class_id)
 		{
 			$query_string = "
-			INSERT INTO Program_Classes
+			INSERT INTO program_classes
 				(program_id, class_id, required)
 			VALUES
 				($program_id, $class_id, '$NO')
@@ -698,7 +698,7 @@ function all_users()
 		foreach ($required_ids as $required_id)
 		{
 			$query_string = "
-			UPDATE Program_Classes
+			UPDATE program_classes
 			SET required='$YES'
 			WHERE
 				program_id=$program_id
@@ -714,7 +714,7 @@ function all_users()
 			if ($minimum_grade > 0)
 			{
 				$query_string = "
-				UPDATE Program_Classes
+				UPDATE program_classes
 				SET
 					minimum_grade=$minimum_grade
 				WHERE
@@ -731,7 +731,7 @@ function all_users()
 		foreach ($sequence_numbers as $class_id => $seqno)
 		{
 			$query_string = "
-			UPDATE Program_Classes
+			UPDATE program_classes
 			SET
 				sequence_no=$seqno
 			WHERE
@@ -759,19 +759,19 @@ function all_users()
 		$required_classes = array();
 		$query_string = "
 		SELECT
-			Classes.id,
-			CONCAT(Classes.name, ' (', Classes.credits, ' cr)') AS name_credits,
-			Classes.name,
-			Program_Classes.minimum_grade,
-			Program_Classes.sequence_no
+			classes.id,
+			CONCAT(classes.name, ' (', classes.credits, ' cr)') AS name_credits,
+			classes.name,
+			program_classes.minimum_grade,
+			program_classes.sequence_no
 		FROM
-			Classes JOIN Program_Classes ON Program_Classes.class_id=Classes.id
+			classes JOIN program_classes ON program_classes.class_id=classes.id
 		WHERE
-			Program_Classes.program_id = $program_id
+			program_classes.program_id = $program_id
 			AND
-			Program_Classes.required = '$YES'
+			program_classes.required = '$YES'
 		ORDER BY
-			Classes.name ASC
+			classes.name ASC
 		;";
 		$result = my_query($query_string, false);
 
@@ -791,16 +791,16 @@ function all_users()
 		$program_classes = array();
 		$query_string = "
 		SELECT
-			Classes.id,
-			CONCAT(Classes.name, ' (', Classes.credits, ' cr)') AS name_credits,
-			Classes.name,
-			Program_Classes.minimum_grade,
-			Program_Classes.sequence_no,
-			Program_Classes.required
+			classes.id,
+			CONCAT(classes.name, ' (', classes.credits, ' cr)') AS name_credits,
+			classes.name,
+			program_classes.minimum_grade,
+			program_classes.sequence_no,
+			program_classes.required
 		FROM
-			Classes JOIN Program_Classes ON Program_Classes.class_id=Classes.id
+			classes JOIN program_classes ON program_classes.class_id=classes.id
 		WHERE
-			Program_Classes.program_id = $program_id
+			program_classes.program_id = $program_id
 		ORDER BY
 			sequence_no, name ASC
 		;";
@@ -822,7 +822,7 @@ function all_users()
 		global $link;
 		$query_string = "
 		INSERT INTO
-			Replacement_Classes(program_id, required_id, replacement_id)
+			replacement_classes(program_id, required_id, replacement_id)
 		VALUES
 			($program_id, $replaced_id, $replacement_id)
 		;";
@@ -839,7 +839,7 @@ function all_users()
 	{
 		global $link, $user_id;
 		$query_string = "
-		DELETE FROM Replacement_Classes
+		DELETE FROM replacement_classes
 		WHERE
 			program_id = $program_id
 			AND
@@ -861,15 +861,15 @@ function all_users()
 		$replacement_classes = array();
 		$query_string = "
 		SELECT
-			Replacement_Classes.required_id,
-			Replacement_Classes.replacement_id,
-			Req.name AS required_name,
-			Rep.name AS replacement_name,
-			Replacement_Classes.note AS note
+			replacement_classes.required_id,
+			replacement_classes.replacement_id,
+			req.name AS required_name,
+			rep.name AS replacement_name,
+			replacement_classes.note AS note
 		FROM
-			Replacement_Classes JOIN Classes AS Rep ON Replacement_Classes.replacement_id=Rep.id JOIN Classes AS Req ON Replacement_Classes.required_id = Req.id
+			replacement_classes JOIN classes AS rep ON replacement_classes.replacement_id=rep.id JOIN classes AS req ON replacement_classes.required_id = req.id
 		WHERE
-			Replacement_Classes.program_id=$program_id
+			replacement_classes.program_id=$program_id
 		;";
 		$result = my_query($query_string, false);
 
@@ -901,7 +901,7 @@ function all_users()
 		SELECT
 			id, name, sequence
 		FROM
-			Checklists
+			checklists
 		WHERE
 			program_id=$program_id
 		ORDER BY
@@ -927,7 +927,7 @@ function all_users()
 
 		$query_string = "
 			UPDATE
-				Checklists
+				checklists
 			SET
 				sequence=sequence+$max_checklist_count
 			WHERE
@@ -943,7 +943,7 @@ function all_users()
 			{
 				$query_string = "
 				UPDATE
-					Checklists
+					checklists
 				SET
 					sequence = $i
 				WHERE
@@ -957,7 +957,7 @@ function all_users()
 
 		$query_string = "
 			DELETE FROM
-				Checklists
+				checklists
 			WHERE
 				sequence > $max_checklist_count
 			;";
@@ -979,7 +979,7 @@ function all_users()
 			SELECT
 				COUNT(id) AS count
 			FROM
-				Checklists
+				checklists
 			WHERE
 				program_id=$program_id
 			;";
@@ -990,7 +990,7 @@ function all_users()
 
 		$query_string = "
 			INSERT INTO
-				Checklists(program_id, name, sequence)
+				checklists(program_id, name, sequence)
 			VALUES
 				($program_id, '$name', $sequence)
 			;";
@@ -1014,7 +1014,7 @@ function all_users()
 		SELECT
 			id, name
 		FROM
-			Templates
+			templates
 		WHERE
 			program_id=$program_id
 		;";
@@ -1039,7 +1039,7 @@ function all_users()
 		SELECT
 			id, name
 		FROM
-			Templates
+			templates
 		WHERE
 			program_id=$program_id
 			AND
@@ -1065,7 +1065,7 @@ function all_users()
 		global $link;
 		$query_string = "
 			INSERT INTO
-				Templates(program_id, name)
+				templates(program_id, name)
 			VALUES
 				($program_id, '$name')
 			;";
@@ -1077,11 +1077,11 @@ function all_users()
 		{
 			$query_string = "
 				INSERT INTO
-					Template_Classes(template_id, class_id, quarter, year)
+					template_classes(template_id, class_id, quarter, year)
 				SELECT
 					$template_id, class_id, quarter, year
 				FROM
-					Template_CLasses
+					template_classes
 				WHERE
 					template_id=$mimic_id
 				;";
@@ -1104,7 +1104,7 @@ function all_users()
 				program_id,
 				name
 			FROM
-				Templates
+				templates
 			WHERE
 				id=$template_id
 			;";
@@ -1122,7 +1122,7 @@ function all_users()
 				quarter,
 				year
 			FROM
-				Template_Classes
+				template_classes
 			WHERE
 				template_id = $template_id
 			;";
@@ -1145,7 +1145,7 @@ function all_users()
 		//! @bug this may not be working correctly, the DELETE FROM needs to be checked
 		$query_string = "
 			UPDATE
-				Templates
+				templates
 			SET
 				name='$name'
 			WHERE
@@ -1155,7 +1155,7 @@ function all_users()
 
 		$query_string = "
 			DELETE FROM
-				Template_Classes
+				template_classes
 			WHERE
 				template_id = $template_id
 			;";
@@ -1167,7 +1167,7 @@ function all_users()
 			$year = $qtr_year["year"];
 			$query_string = "
 				INSERT INTO
-					Template_Classes(template_id, class_id, quarter, year)
+					template_classes(template_id, class_id, quarter, year)
 				VALUES
 					($template_id, $class_id, $qtr, $year)
 				ON DUPLICATE KEY UPDATE
@@ -1211,14 +1211,14 @@ function all_users()
 			// $program_id != 0
 			$query_string = "
 			SELECT
-				Classes.id,
-				CONCAT(Classes.name, ' (', Classes.credits, ' cr)') AS name,
-				Program_Classes.minimum_grade,
-				COALESCE(Program_Classes.sequence_no, 1000) AS seqno
+				classes.id,
+				CONCAT(classes.name, ' (', classes.credits, ' cr)') AS name,
+				program_classes.minimum_grade,
+				COALESCE(program_classes.sequence_no, 1000) AS seqno
 			FROM
-				Classes LEFT JOIN Program_Classes ON Classes.id=Program_Classes.class_id
+				classes LEFT JOIN program_classes ON classes.id=program_classes.class_id
 			WHERE
-				Program_Classes.program_id=$program_id
+				program_classes.program_id=$program_id
 			ORDER BY
 				active, seqno, name ASC";
 
@@ -1236,10 +1236,10 @@ function all_users()
 
 			$query_string = "
 			SELECT
-				Classes.id,
-				CONCAT(Classes.name, ' (', Classes.credits, ' cr)') AS name
+				classes.id,
+				CONCAT(classes.name, ' (', classes.credits, ' cr)') AS name
 			FROM
-				Classes
+				classes
 			ORDER BY
 				active,
 				name ASC
@@ -1265,10 +1265,10 @@ function all_users()
 			// $program_id = 0
 			$query_string = "
 			SELECT
-				Classes.id,
-				CONCAT(Classes.name, ' (', Classes.credits, ' cr)') AS name
+				classes.id,
+				CONCAT(classes.name, ' (', classes.credits, ' cr)') AS name
 			FROM
-				Classes
+				classes
 			ORDER BY
 				active,
 				name ASC
@@ -1295,7 +1295,7 @@ function all_users()
 	{
 		global $link;
 		$query_string = "
-		INSERT INTO Classes
+		INSERT INTO classes
 			(name, title, credits, fall, winter, spring, summer)
 		VALUES
 			('$name', '$title', $credits, '$fall', '$winter', '$spring', '$summer')
@@ -1318,7 +1318,7 @@ function all_users()
 		global $link;
 		$query_string = "
 		UPDATE
-			Classes
+			classes
 		SET
 			name='$name',
 			title='$title',
@@ -1346,7 +1346,7 @@ function all_users()
 		// Delete existing prerequisites
 		$query_string = "
 		DELETE FROM
-			Prerequisites
+			prerequisites
 		WHERE
 			class_id=$class_id
 		;";
@@ -1364,7 +1364,7 @@ function all_users()
 			if (check_class_exists($class_id) && check_class_exists($prereq_id)) {
 				// Adjusted query to handle potential NULL minimum_grade
 				$query_string = "
-				INSERT INTO Prerequisites
+				INSERT INTO prerequisites
 					(class_id, prerequisite_id, minimum_grade)
 				VALUES
 					($class_id, $prereq_id, $minimum_grade)
@@ -1399,14 +1399,14 @@ function get_prereqs($class_id)
 	{
 		$query_string = "
 		SELECT
-			Prerequisites.prerequisite_id,
-			Classes.name,
-			Prerequisites.minimum_grade
+			prerequisites.prerequisite_id,
+			classes.name,
+			prerequisites.minimum_grade
 		FROM
-			Prerequisites
-			JOIN Classes ON Prerequisites.prerequisite_id=Classes.id
+			prerequisites
+			JOIN classes ON prerequisites.prerequisite_id=classes.id
 		WHERE
-			Prerequisites.class_id = $class_id
+			prerequisites.class_id = $class_id
 		;";
 		$query_result = my_query($query_string, false);
 
@@ -1430,9 +1430,9 @@ function get_prereqs($class_id)
 		SELECT
 			id, name, title, credits, fall, winter, spring, summer, active
 		FROM
-			Classes
+			classes
 		WHERE
-			Classes.id=$id
+			classes.id=$id
 			;";
 		/*
                 if ($program_id != 0)
@@ -1474,9 +1474,9 @@ function get_prereqs($class_id)
 			SELECT
 				id
 			FROM
-				Classes
+				classes
 			WHERE
-				Classes.name=\"$name\"
+				classes.name=\"$name\"
 				;";
 		/*
 				if ($program_id != 0)
@@ -1508,12 +1508,12 @@ function get_prereqs($class_id)
 			term,
 			student_id
 		FROM
-			Student_Classes
-			JOIN Students ON Students.id=Student_Classes.student_id
+			student_classes
+			JOIN students ON students.id=student_classes.student_id
 		WHERE
 			class_id=$id
 			AND
-			Students.active = 'Yes'
+			students.active = 'Yes'
 		ORDER BY
 			term
 			;";
@@ -1544,19 +1544,19 @@ function get_prereqs($class_id)
 
 		$query_string = "
 		SELECT
-			CONCAT(Students.last, ', ', Students.first) AS name,
-			Students.email,
-			Students.cwu_id
+			CONCAT(students.last, ', ', students.first) AS name,
+			students.email,
+			students.cwu_id
 		FROM
-			Student_Classes
-			JOIN Students ON Student_Classes.student_id=Students.id
+			student_classes
+			JOIN students ON student_classes.student_id=students.id
 		WHERE
 			class_id=$class_id
 			AND
 			term=$term
-			AND Students.active = 'Yes'
+			AND students.active = 'Yes'
 		ORDER BY
-			Students.last, Students.first ASC
+			students.last, students.first ASC
 			;";
 
 		$query_result = my_query($query_string, false);
@@ -1573,24 +1573,24 @@ function get_prereqs($class_id)
 		global $YES;
 
 		$sql_result = my_query("SELECT DISTINCT
-    Classes.id,
-    Classes.name,
+    classes.id,
+    classes.name,
     Count(*) AS count
 FROM
-    Student_Classes AS Hub
+    student_classes AS hub
 JOIN
-    Student_Classes AS Spoke ON Hub.student_id = Spoke.student_id AND Spoke.term = Hub.term
+    student_classes AS spoke ON hub.student_id = spoke.student_id AND spoke.term = hub.term
 JOIN
-    Classes ON Classes.id = Spoke.class_id
+    classes ON classes.id = spoke.class_id
 JOIN
-    Students ON Students.id = Hub.student_id
+    students ON students.id = hub.student_id
 WHERE
-    Hub.class_id = $class_id
-    AND Hub.term = $term
-    AND Students.active = '$YES'
-    AND Hub.class_id != Spoke.class_id
+    hub.class_id = $class_id
+    AND hub.term = $term
+    AND students.active = '$YES'
+    AND hub.class_id != spoke.class_id
 GROUP BY
-    Classes.id, Classes.name;
+    classes.id, classes.name;
 ", false);
 
 		$result = array();
@@ -1608,14 +1608,14 @@ GROUP BY
 		global $YES;
 
 		$sql_result = my_query("SELECT DISTINCT
-			Students.id,
-			Students.cwu_id,
-			Students.first,
-			Students.last
+			students.id,
+			students.cwu_id,
+			students.first,
+			students.last
 		FROM
-			Students,
-			Student_Classes AS First,
-			Student_Classes AS Second
+			students,
+			student_classes AS First,
+			student_classes AS Second
 		WHERE
 			First.student_id=Second.student_id
 			AND
@@ -1627,9 +1627,9 @@ GROUP BY
 			AND
 			Second.term=$term
 			AND
-			Students.active='$YES'
+			students.active='$YES'
 			AND
-			Students.id=First.student_id
+			students.id=First.student_id
 		ORDER BY last, first ASC;", false);
 
 		$result = array();
@@ -1651,7 +1651,7 @@ GROUP BY
 		SELECT
 			id
 		FROM
-			Student_Programs
+			student_programs
 		WHERE
 			user_id=$user_id
 			AND
@@ -1666,20 +1666,20 @@ GROUP BY
 	{
 		$query_string = "
 		SELECT
-			Programs.id AS program_id,
-			CONCAT(Majors.name, ' (', Programs.year, ')') AS program_name,
-			Users.id AS advisor_id,
-			Users.name AS advisor_name
+			programs.id AS program_id,
+			CONCAT(majors.name, ' (', programs.year, ')') AS program_name,
+			users.id AS advisor_id,
+			users.name AS advisor_name
 		FROM
-			Student_Programs
-			JOIN Programs ON Student_Programs.program_id=Programs.id
-			JOIN Majors ON Majors.id = Programs.major_id
-			LEFT JOIN Users ON Student_Programs.user_id=Users.id
+			student_programs
+			JOIN programs ON student_programs.program_id=programs.id
+			JOIN majors ON majors.id = programs.major_id
+			LEFT JOIN users ON student_programs.user_id=users.id
 		WHERE
 			student_id=$student_id
 		ORDER BY
-			Majors.name,
-			Programs.year
+			majors.name,
+			programs.year
 		;";
 		$query_result = my_query($query_string, false);
 
@@ -1698,7 +1698,7 @@ GROUP BY
 		SELECT
 			*
 		FROM
-			Student_Programs
+			student_programs
 		WHERE
 			student_id=$student_id
 			AND
@@ -1719,7 +1719,7 @@ GROUP BY
 			SELECT
 				id
 			FROM
-				Students
+				students
 			WHERE
 				cwu_id='$cwu_id';";
 		}
@@ -1729,7 +1729,7 @@ GROUP BY
 			SELECT
 				id
 			FROM
-				Students
+				students
 			WHERE
 				email='$email';";
 		}
@@ -1745,7 +1745,7 @@ GROUP BY
 				}
 				$query_string = "
 				INSERT INTO
-					Students(cwu_id, email, first, last)
+					students(cwu_id, email, first, last)
 				VALUES
 					($cwu_id, '$email', '$first', '$last');";
 				$result = my_query($query_string, false);
@@ -1770,7 +1770,7 @@ GROUP BY
 		SELECT
 			COALESCE(id,0) AS id
 		FROM 
-			Students
+			students
 		WHERE
 			cwu_id=$cwu_id
 		;";
@@ -1800,7 +1800,7 @@ GROUP BY
 		SELECT
 			id, cwu_id, CONCAT(first, ' ', last) AS name, email, first, last, active, phone, address, postbaccalaureate, non_stem_majors, withdrawing, veterans_benefits, international_student,  transfer_student
 		FROM
-			Students
+			students
 		WHERE
 			$where
 			;";
@@ -1832,16 +1832,16 @@ GROUP BY
 	{
 		$query_string = "
 		SELECT
-			Users.id,
-			Users.name,
-			Users.login
+			users.id,
+			users.name,
+			users.login
 		FROM
-			Student_Programs
-			JOIN Users ON Student_Programs.user_id=Users.id
+			student_programs
+			JOIN users ON student_programs.user_id=users.id
 		WHERE
 			student_id=$student_id
 			AND
-			Student_Programs.program_id=$program_id
+			student_programs.program_id=$program_id
 		;";
 		$query_result = my_query($query_string, false);
 
@@ -1857,7 +1857,7 @@ GROUP BY
 			SELECT
 				id
 			FROM
-				Students
+				students
 			WHERE
 				cwu_id=$cwu_id
 			;";
@@ -1876,7 +1876,7 @@ GROUP BY
 		}
 
 		$query_string = "
-		INSERT INTO Students
+		INSERT INTO students
 			(cwu_id, email, first, last)
 		VALUES
 			($cwu_id, '$email', '$first', '$last')
@@ -1902,7 +1902,7 @@ GROUP BY
 		global $link;
 		$query_string = "
 		UPDATE
-			Students
+			students
 		SET
 			first='$first',
 			last='$last',
@@ -1935,7 +1935,7 @@ GROUP BY
 		global $link;
 		$query_string = "
 		UPDATE
-			Student_Programs
+			student_programs
 		SET
 			user_id=$advisor_id
 		WHERE
@@ -1959,7 +1959,7 @@ GROUP BY
 
 		$query_string = "
 		INSERT INTO
-			Student_Majors(student_id, major_id, advisor, catalog_year, graduation_year)
+			student_majors(student_id, major_id, advisor, catalog_year, graduation_year)
 		VALUES
 			($student_id, $major_id, '$advisor', $catalog_year, $graduation_year)
 		;";
@@ -1976,7 +1976,7 @@ GROUP BY
 		{
 			$query_string = "
 			DELETE FROM
-				Student_Programs
+				student_programs
 			WHERE
 				student_id = $student_id
 				AND
@@ -1995,7 +1995,7 @@ GROUP BY
 		{
 			$query_string = "
 			INSERT INTO
-				Student_Programs(student_id, program_id, user_id)
+				student_programs(student_id, program_id, user_id)
 			VALUES
 				($student_id, $add_program_id, $add_advisor_id)
 			;";
@@ -2010,7 +2010,7 @@ GROUP BY
 
 		$query_string = "
 		UPDATE
-			Students
+			students
 		SET
 			non_stem_majors='$non_stem_majors'
 		WHERE
@@ -2031,7 +2031,7 @@ GROUP BY
 		SELECT
 			catalog_year
 		FROM
-			Student_Majors
+			student_majors
 		WHERE
 			student_id=$student_id
 			AND
@@ -2045,9 +2045,9 @@ GROUP BY
 
 		$query_string = "
 		DELETE
-			Electives
+			electives
 		FROM
-			Electives JOIN Student_Classes ON (Electives.student_class_id=Student_Classes.id)
+			electives JOIN student_classes ON (electives.student_class_id=student_classes.id)
 		WHERE
 			program_id=$program_id
 			AND
@@ -2057,9 +2057,9 @@ GROUP BY
 
 		$query_string = "
 		DELETE
-			Student_Checklists
+			student_checklists
 		FROM
-			Student_Checklists JOIN Checklists ON (Student_Checklists.checklist_id=Checklists.id)
+			student_checklists JOIN checklists ON (student_checklists.checklist_id=checklists.id)
 		WHERE
 			student_id=$student_id
 			AND
@@ -2069,7 +2069,7 @@ GROUP BY
 
 		$query_string = "
 		DELETE FROM
-			Student_Majors
+			student_majors
 		WHERE
 			student_id=$student_id
 			AND
@@ -2083,7 +2083,7 @@ GROUP BY
 		global $link;
 		$query_string = "
 		DELETE FROM
-			Student_Classes
+			student_classes
 		WHERE
 			student_id='$student_id'
 			AND term != '000'
@@ -2102,7 +2102,7 @@ GROUP BY
 		global $link;
 		$query_string = "
 		INSERT INTO
-			Student_Classes(student_id, class_id, term)
+			student_classes(student_id, class_id, term)
 		VALUES
 			($student_id, $class_id, $term)
 		;";
@@ -2119,7 +2119,7 @@ GROUP BY
 	function add_student_elective($user_id, $student_class_id, $program_id)
 	{
 		$query_string = "
-		INSERT INTO Electives
+		INSERT INTO electives
 			(student_class_id, program_id)
 		VALUES
 			($student_class_id, $program_id)
@@ -2169,17 +2169,17 @@ GROUP BY
 
 		$query_string = "
 		SELECT
-			Student_Classes.id AS student_class_id,
-			Student_Classes.term,
-			Classes.id
+			student_classes.id AS student_class_id,
+			student_classes.term,
+			classes.id
 		FROM
-			Student_Classes
-			JOIN Classes ON Student_Classes.class_id=Classes.id
+			student_classes
+			JOIN classes ON student_classes.class_id=classes.id
 		WHERE
-			Student_Classes.student_id=$student_id
+			student_classes.student_id=$student_id
 		ORDER BY
-			Student_Classes.term,
-			Classes.name
+			student_classes.term,
+			classes.name
 			;";
 
 		$query_result = my_query($query_string, false);
@@ -2230,17 +2230,17 @@ GROUP BY
 	{
 		$query_string = "
 		SELECT
-			Notes.id,
+			notes.id,
 			datetime,
 			note,
 			flagged,
 			name
 		FROM
-			Notes JOIN Users ON Notes.user_id=Users.id
+			notes JOIN users ON notes.user_id=users.id
 		WHERE
-			Notes.student_id=$student_id
+			notes.student_id=$student_id
 		ORDER BY
-			Notes.flagged, Notes.datetime DESC
+			notes.flagged, notes.datetime DESC
 		;";
 		$query_result = my_query($query_string, false);
 
@@ -2273,7 +2273,7 @@ GROUP BY
 
 		$flagged_text = ($flagged ? $YES : $NO);
 		$query_string = "
-		INSERT INTO Notes
+		INSERT INTO notes
 			(user_id, student_id, note, flagged, datetime)
 		VALUES
 			($user_id, $student_id, '$escaped_note', '$flagged_text', NOW())
@@ -2295,7 +2295,7 @@ GROUP BY
 		global $NO;
 
 		$query_string = "
-		UPDATE Notes
+		UPDATE notes
 		SET
 			flagged='$NO'
 		WHERE
@@ -2306,7 +2306,7 @@ GROUP BY
 		foreach ($flagged_ids as $flagged_id)
 		{
 			$query_string = "
-			UPDATE Notes
+			UPDATE notes
 			SET
 				flagged='$YES'
 			WHERE
@@ -2320,7 +2320,7 @@ GROUP BY
 	{
 		$query_string = "
 		DELETE FROM
-			Student_Classes
+			student_classes
 		WHERE
 			student_id = $student_id
 			AND
@@ -2331,7 +2331,7 @@ GROUP BY
 		foreach ($requirements_taken as $requirement_id)
 		{
 			$query_string = "
-			INSERT INTO Student_Classes
+			INSERT INTO student_classes
 				(student_id, class_id, term)
 			VALUES
 				($student_id, $requirement_id, 000)
@@ -2378,17 +2378,17 @@ GROUP BY
 	{
 		$query_string = "
 		SELECT
-			Students.id,
+			students.id,
 			CONCAT(COALESCE(last,'*'), ', ', COALESCE(first,'*'), ' (', cwu_id, ')') AS name
 		FROM
-			Students
+			students
 			JOIN
-			Student_Programs
-			ON Students.id=Student_Programs.student_id
+			student_programs
+			ON students.id=student_programs.student_id
 		WHERE
 			cwu_id != 0
 			AND
-			Student_Programs.user_id=$user_id
+			student_programs.user_id=$user_id
 		ORDER BY
 			active, last, first ASC
 		;";
@@ -2415,7 +2415,7 @@ function all_students($inactiveOnly = false): array
             id,
             CONCAT(COALESCE(last,'*'), ', ', COALESCE(first,'*'), ' (', cwu_id, ')') AS name
         FROM
-            Students
+            students
         WHERE
             cwu_id != 0
             AND
@@ -2431,7 +2431,7 @@ function all_students($inactiveOnly = false): array
             id,
             CONCAT(COALESCE(last,'*'), ', ', COALESCE(first,'*'), ' (', cwu_id, ')') AS name
         FROM
-            Students
+            students
         WHERE
             cwu_id != 0
             AND
@@ -2459,26 +2459,26 @@ function get_electives_credits($student_id, $program_id)
 	{
 		$query_string = "
 		SELECT
-			Classes.id AS class_id,
-			Classes.name AS short_name,
-			CONCAT(Classes.name, ' (', Classes.credits, ' cr)') AS name,
-			Classes.title,
-			Classes.credits,
-			Classes.fall,
-			Classes.winter,
-			Classes.spring,
-			Classes.summer,
-			Student_Classes.term,
-			Student_Classes.id,
-			Electives.id AS elective_id
+			classes.id AS class_id,
+			classes.name AS short_name,
+			CONCAT(classes.name, ' (', classes.credits, ' cr)') AS name,
+			classes.title,
+			classes.credits,
+			classes.fall,
+			classes.winter,
+			classes.spring,
+			classes.summer,
+			student_classes.term,
+			student_classes.id,
+			electives.id AS elective_id
 		FROM
-			Electives
-			JOIN Student_Classes ON Electives.student_class_id=Student_Classes.id
-			JOIN Classes ON Student_Classes.class_id = Classes.id
+			electives
+			JOIN student_classes ON electives.student_class_id=student_classes.id
+			JOIN classes ON student_classes.class_id = classes.id
 		WHERE
-			Student_Classes.student_id = $student_id
+			student_classes.student_id = $student_id
 			AND
-			Electives.program_id = $program_id
+			electives.program_id = $program_id
 		;";
 		$query_result = my_query($query_string, false);
 
@@ -2503,7 +2503,7 @@ function get_electives_credits($student_id, $program_id)
 			SELECT
 				class_id, quarter, year
 			FROM
-				Template_Classes
+				template_classes
 			WHERE
 				template_id=$template_id
 				AND
@@ -2520,7 +2520,7 @@ function get_electives_credits($student_id, $program_id)
 
 				$query_string = "
 					INSERT INTO
-						Student_Classes(student_id, class_id, term)
+						student_classes(student_id, class_id, term)
 					VALUES
 						($student_id, $class_id, $term)
 					;";
@@ -2540,9 +2540,9 @@ function get_electives_credits($student_id, $program_id)
 	{
 		$query_string = "
 		SELECT
-			Student_Checklists.checklist_id
+			student_checklists.checklist_id
 		FROM
-			Student_Checklists JOIN Checklists ON Student_Checklists.checklist_id=Checklists.id
+			student_checklists JOIN checklists ON student_checklists.checklist_id=checklists.id
 		WHERE
 			student_id=$student_id
 			AND
@@ -2564,9 +2564,9 @@ function get_electives_credits($student_id, $program_id)
 		global $link;
 		$query_string = "
 		DELETE
-			Student_Checklists
+			student_checklists
 		FROM
-			Student_Checklists JOIN Checklists ON Student_Checklists.checklist_id=Checklists.id
+			student_checklists JOIN checklists ON student_checklists.checklist_id=checklists.id
 		WHERE
 			student_id=$student_id
 			AND
@@ -2586,7 +2586,7 @@ function get_electives_credits($student_id, $program_id)
 		global $link;
 		$query_string = "
 		INSERT INTO
-			Student_Checklists(checklist_id, student_id)
+			student_checklists(checklist_id, student_id)
 		VALUES
 			($checklist_id, $student_id)
 		;";
@@ -2616,41 +2616,41 @@ function get_electives_credits($student_id, $program_id)
 		//! @todo need to limit to the future
 		$query_string = "
 		SELECT
-			Student_Classes.term,
-			CONCAT(Classes.name, ' (', Classes.credits, ' cr)') AS class_name,
-			CONCAT(Students.first, ' ', Students.last) AS student_name,
-			Students.cwu_id,
-			Classes.id AS class_id
+			student_classes.term,
+			CONCAT(classes.name, ' (', classes.credits, ' cr)') AS class_name,
+			CONCAT(students.first, ' ', students.last) AS student_name,
+			students.cwu_id,
+			classes.id AS class_id
 		FROM
-			Student_Classes
-			JOIN Classes ON Student_Classes.class_id=Classes.id
-			JOIN Students ON Student_Classes.student_id=Students.id
+			student_classes
+			JOIN classes ON student_classes.class_id=classes.id
+			JOIN students ON student_classes.student_id=students.id
 		WHERE
 			(
 				(
 					RIGHT(term,1) = '1'
-					AND Classes.fall = '$NO'
+					AND classes.fall = '$NO'
 				)
 				OR
 				(
 					RIGHT(term,1) = '2'
-					AND Classes.winter = '$NO'
+					AND classes.winter = '$NO'
 				)
 				OR
 				(
 					RIGHT(term,1) = '3'
-					AND Classes.spring='$NO'
+					AND classes.spring='$NO'
 				)
 				OR
 				(
 					RIGHT(term,1) = '4'
-					AND Classes.summer = '$NO'
+					AND classes.summer = '$NO'
 				)
 			)	
 			AND
 				LEFT(term,4) >= YEAR(CURDATE())	
 			AND
-				Students.active = '$YES'
+				students.active = '$YES'
 			ORDER BY
 				term
 		;";
@@ -2674,7 +2674,7 @@ function get_electives_credits($student_id, $program_id)
 			email,
 			active
 		FROM
-			Students
+			students
 		WHERE
 			cwu_id != 0
 			AND
@@ -2710,30 +2710,30 @@ function get_electives_credits($student_id, $program_id)
 
 		$query_string = "
 SELECT
-    Classes.id,
-    Classes.name,
-    Student_Classes.term,
-    CONCAT(Classes.name, ' (', Classes.credits, ' cr)') AS name_credits,
-    COUNT(Student_Classes.student_id) AS enrollment
+    classes.id,
+    classes.name,
+    student_classes.term,
+    CONCAT(classes.name, ' (', classes.credits, ' cr)') AS name_credits,
+    COUNT(student_classes.student_id) AS enrollment
 FROM
-    Classes
+    classes
 JOIN
-    Student_Classes ON Classes.id=Student_Classes.class_id
+    student_classes ON classes.id=student_classes.class_id
 JOIN
-    Students ON Students.id=Student_Classes.student_id
+    students ON students.id=student_classes.student_id
 WHERE
     (
-        Student_Classes.term='$year1'
-        OR Student_Classes.term='$year2'
-        OR Student_Classes.term='$year3'
-        OR Student_Classes.term='$year4'
+        student_classes.term='$year1'
+        OR student_classes.term='$year2'
+        OR student_classes.term='$year3'
+        OR student_classes.term='$year4'
     )
-    AND Students.active='$YES'
+    AND students.active='$YES'
 GROUP BY
-    Classes.id, Classes.name, Classes.credits, Student_Classes.term
+    classes.id, classes.name, classes.credits, student_classes.term
 ORDER BY
-    Classes.name ASC,
-    Student_Classes.term
+    classes.name ASC,
+    student_classes.term
 ;";
 
 		$result = my_query($query_string, false);
@@ -2763,33 +2763,33 @@ ORDER BY
 	
 		$query_string = "
 	SELECT
-		C.id,
-		C.name,
-		SC.term,
-		CONCAT(C.name, ' (', C.credits, ' cr)') AS name_credits,
-		COUNT(SC.student_id) AS enrollment
+		c.id,
+		c.name,
+		sc.term,
+		CONCAT(c.name, ' (', c.credits, ' cr)') AS name_credits,
+		COUNT(sc.student_id) AS enrollment
 	FROM
-		Classes C
+		classes c
 	JOIN
-		Student_Classes SC ON C.id = SC.class_id
+		student_classes sc ON c.id = sc.class_id
 	JOIN
-		Students S ON S.id = SC.student_id
+		students s ON s.id = sc.student_id
 	JOIN
-		Program_Classes PC ON C.id = PC.class_id
+		program_classes pc ON c.id = pc.class_id
 	WHERE
 		(
-			SC.term = '$year1'
-			OR SC.term = '$year2'
-			OR SC.term = '$year3'
-			OR SC.term = '$year4'
+			sc.term = '$year1'
+			OR sc.term = '$year2'
+			OR sc.term = '$year3'
+			OR sc.term = '$year4'
 		)
-		AND S.active = '$YES'
-		AND PC.program_id = '$program_id' -- Filter by program ID
+		AND s.active = '$YES'
+		AND pc.program_id = '$program_id' -- Filter by program ID
 	GROUP BY
-		C.id, C.name, C.credits, SC.term
+		c.id, c.name, c.credits, sc.term
 	ORDER BY
-		C.name ASC,
-		SC.term
+		c.name ASC,
+		sc.term
 	;";
 	
 		$result = my_query($query_string, false);
