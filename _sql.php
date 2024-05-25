@@ -23,18 +23,11 @@
 function get_user_info($login = '', $password = '', $setCookies = true)
 {
 	// Use environment variables for configuration
-	/*$host = $_ENV['DB_HOST'];
+	$host = $_ENV['DB_HOST'];
 	$port = $_ENV['DB_PORT'];
 	$user = $_ENV['DB_USER'];
 	$pass = $_ENV['DB_PASS'];
 	$dbName = $_ENV['DB_NAME'];
-	*/
-	// fake creds for testing
-	$host = 'localhost';
-	$port = '3306';
-	$user = 'u905526398_user';
-	$pass = 'Tz6xrvnfg!';
-	$dbName = 'u905526398_scheduler';
 
 	global $link;
 	// Establish connection to the database
