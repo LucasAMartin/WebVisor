@@ -27,10 +27,16 @@ $all_programs_blank = array(0 => '') + all_programs();
     <script src="https://cdn.jsdelivr.net/npm/select2/dist/js/select2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/navbar.css">
     <title>Program Roster</title>
-    <link rel='stylesheet' type='text/css' href='styles/_style.css'/>
+    <link rel='stylesheet' type='text/css' href='styles/test.css'/>
 </head>
 <body>
 <style>
+    body {
+        background: var(--offWhite);
+    }
+    form {
+        width: 100%;
+    }
 
     table {
         margin-top: 20px;
@@ -48,10 +54,10 @@ $all_programs_blank = array(0 => '') + all_programs();
         margin-top: 10px;
     }
 
-    .select2-container {
+    .select2  {
         margin-bottom: 10px;
         margin-top: 10px;
-        width: 20% !important;
+        width: 16rem !important;
     }
 
     #exportButton {
@@ -77,8 +83,8 @@ echo(linkmenu('Majors'));
         </td>
         <br />
         <input type='submit' />
+        <button id="exportButton" disabled>Export to CSV</button> <!-- Disabled Export to CSV button -->
     </form>
-    <button id="exportButton" disabled>Export to CSV</button> <!-- Disabled Export to CSV button -->
     <table id="rosterTable">
         <tr><th>Name</th><th>CWU ID</th><th>Email</th><th>Advisor</th></tr>
         <?php foreach ($roster as $id => $student_info): ?>
