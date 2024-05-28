@@ -40,8 +40,7 @@
         $winter = extract_yesno($_POST, 'new_winter');
         $spring = extract_yesno($_POST, 'new_spring');
         $summer = extract_yesno($_POST, 'new_summer');
-
-        $class_id = add_class($user_id, $name, $credits, $title, $fall, $winter, $spring, $summer);
+        $grades = $_POST['grade'];
     }
 
     if (isset($_POST['update_class'])) {
@@ -55,69 +54,28 @@
         $active = extract_yesno($_POST, 'update_active');
 
         update_class($user_id, $class_id, $name, $title, $credits, $fall, $winter, $spring, $summer, $active);
-
-        $required_grades = extract_id_values('grade', $_POST); // all grades in the system
-        $selectedClassIds = isset($_POST['update_prereqs']) ? (array)$_POST['update_prereqs'] : array();
-        $deleted_ids = extract_ids('delete', $_POST); // prereqs we are removing
-
-        $core_ids = array_keys($required_grades);
-        $core_ids = array_merge($core_ids, $selectedClassIds);
-        $core_ids = array_diff($core_ids, $deleted_ids);
-
-        /* UPDATE PREREQ GRADES*/
-        // Fetch current prerequisites from the database
-        $current_prereqs = get_prereqs($class_id);
-
-        // Prepare an array to track which grades have changed
-        $changed_grades = [];
-
-        // Compare each current prerequisite's grade to the new grade from $_POST
-        foreach ($current_prereqs as $prereq) {
-            $prereq_id = $prereq['prerequisite_id'];
-            $current_grade = $prereq['minimum_grade'];
-
-            // Check if this prerequisite's grade has been posted and has changed
-            if (isset($required_grades[$prereq_id]) && $required_grades[$prereq_id] != $current_grade) {
-                // Store the new grade for updating
-                $changed_grades[$prereq_id] = $required_grades[$prereq_id];
+        $grades = $_POST['grade'];
+        // Check if any prerequisites should be removed
+        if (isset($_POST['remove'])) {
+            $remove = $_POST['remove'];
+            foreach ($remove as $id => $value) {
+                if ($value == 'on') {
+                    unset($grades[$id]);
+                }
             }
         }
+        update_prereqs($class_id, array_keys($grades), $grades);
+        $selectedClassIds = isset($_POST['update_prereqs']) ? (array)$_POST['update_prereqs'] : array();
 
-        // Update the database for any changed grades
-        foreach ($changed_grades as $prereq_id => $new_grade) {
-            updatePrerequisiteGrade($class_id, $prereq_id, $new_grade);
-        }
-        /* DELETE PREREQS */
-        // Assuming deletePrerequisite function is correctly implemented as shown previously
-        foreach ($deleted_ids as $deleted_id) {
-            deletePrerequisite($class_id, $deleted_id);
-        }
-        /* ADD PREREQS */
         // Loop through each selected class ID and add it as a prerequisite
         foreach ($selectedClassIds as $selectedClassId) {
             // Assuming $studentClassId and $programId need to be determined or are known
 
-            $minimumGrade = '20';
+            $minimumGrade = 20;
 
             // Call the function to add each prerequisite
             addPrerequisite($class_id, $selectedClassId, $minimumGrade);
         }
-    }
-    // Function to update a prerequisite's minimum grade in the database
-    function updatePrerequisiteGrade($classId, $prereqId, $minimumGrade)
-    {
-        global $link; // Ensure your database connection is available
-
-        $query = "UPDATE prerequisites SET minimum_grade = ? WHERE class_id = ? AND prerequisite_id = ?";
-        $stmt = mysqli_prepare($link, $query);
-
-        mysqli_stmt_bind_param($stmt, 'sii', $minimumGrade, $classId, $prereqId);
-
-        if (!mysqli_stmt_execute($stmt)) {
-            echo "Error updating prerequisite grade: " . mysqli_error($link);
-        }
-
-        mysqli_stmt_close($stmt);
     }
 
     function addPrerequisite($classId, $prerequisiteId, $minimumGrade)
@@ -143,34 +101,6 @@
         mysqli_stmt_close($stmt);
     }
 
-    function deletePrerequisite($class_id, $deleted_id)
-    {
-        global $link;
-        // Assuming $mysqli is your database connection
-        // and $class_id and $prerequisite_id are already defined and validated variables
-
-        // The SQL statement for deletion
-        $sql = "DELETE FROM prerequisites WHERE class_id = ? AND prerequisite_id = ?";
-
-        // Prepare the statement
-        $stmt = $link->prepare($sql);
-
-        if ($stmt) {
-            // Bind the parameters to the statement
-            $stmt->bind_param("ii", $class_id, $deleted_id); // 'ii' denotes that both parameters are integers
-
-            // Execute the statement
-            if ($stmt->execute()) {
-            } else {
-                echo "Error deleting record: " . $stmt->error;
-            }
-
-            // Close the statement
-            $stmt->close();
-        } else {
-            echo "Error preparing statement: " . $link->error;
-        }
-    }
 
     $all_classes = all_classes();
     $all_classes_blank = array('0' => '') + $all_classes;
