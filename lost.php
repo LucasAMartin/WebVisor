@@ -21,11 +21,40 @@
 	$bad_cwu_ids = get_bad_cwu_ids();
 	
 ?>
-	<link rel="stylesheet" type="text/css" href="styles/_style.css">
+	<link rel="stylesheet" type="text/css" href="styles/test.css">
 	<link rel="stylesheet" type="text/css" href="styles/navbar.css">
 </head>
 <body>
+<style>
+	body {
+		background: var(--offWhite);
+	}
 
+	table {
+		margin-top: 20px;
+		width: 100%;
+	}
+
+	th, td {
+		text-align: left;
+		padding: 8px;
+		margin-top: 10px;
+	}
+
+	tr:nth-child(even) {
+		background-color: #f2f2f2;
+		margin-top: 10px;
+	}
+
+	.content_container {
+		padding-left: 12px;
+	}
+
+	p {
+		text-align: center;
+	}
+
+</style>
 <?php
 	echo(messages());
 	echo(linkmenu('Lost Students'));

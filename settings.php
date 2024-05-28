@@ -70,10 +70,18 @@
     }
     ?>
     <title>Settings</title>
-    <link rel="stylesheet" type="text/css" href="styles/_style.css"><link rel="stylesheet" type="text/css" href="styles/navbar.css">
+    <link rel="stylesheet" type="text/css" href="styles/test.css"><link rel="stylesheet" type="text/css" href="styles/navbar.css">
 </head>
 <body>
+<style>
+    p {
+        padding-left: 12px;
+    }
 
+    h1 {
+        padding-left: 12px;
+    }
+</style>
 <?php
 if (true || $connected) { // Ensure $connected is defined and true to display messages and menu
     echo messages(); // Assuming this function prints session or other messages
@@ -115,11 +123,7 @@ if (true || $connected) { // Ensure $connected is defined and true to display me
 	else
 	{
 ?>
-			<tr>
-				<td />
-				<td><input type='submit' name='logout' value='Logout' /></td>
-				<td />
-			<tr>
+
 			<tr>
 				<td colspan='3' style='background-color:white;' />
             <tr>
@@ -153,6 +157,11 @@ if (true || $connected) { // Ensure $connected is defined and true to display me
 				<td><input type='submit' name='update' value='Update' /></td>
 				<td />
 			</tr>
+        <tr>
+            <td />
+            <td><input type='submit' name='logout' value='Logout' /></td>
+            <td />
+        </tr>
 <?php
     }
 ?>
@@ -162,9 +171,9 @@ if (true || $connected) { // Ensure $connected is defined and true to display me
 <?php
 // Assume is_superuser function definition is elsewhere and returns a boolean
 if (is_superuser($user_info)) {
-    echo '<h2>Add New User</h2>';
     ?>
     <form method="post" action="">
+        <h2>Add New User</h2>
         <table class="input">
             <tr>
                 <td>User Login</td>
