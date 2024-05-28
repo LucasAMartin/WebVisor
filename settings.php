@@ -89,7 +89,6 @@ if (true || $connected) { // Ensure $connected is defined and true to display me
 }
 ?>
 <div class="content_container">
-<h1>Settings</h1>
 
 <?php if ($user_info) { ?>
 	<p>If you see this, you are connected to the system. You can log out (and delete the cookie with your username and password) by selecting "Logout". This causes the browser you are using to delete the login information for you. You do not need to update anything on this page, but this is the page you would change it on if you decide to update the password.</p>
@@ -98,7 +97,8 @@ if (true || $connected) { // Ensure $connected is defined and true to display me
 <?php } ?>
 
     <form method="post" onsubmit="return validatePassword()">
-		<table class='input'>
+        <h1>Settings</h1>
+        <table class='input'>
 <?php
 	if (!$user_info)
 	{
