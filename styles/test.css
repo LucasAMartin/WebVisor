@@ -10,7 +10,7 @@ label.checkbox
 table.input td.flagged
 {
     font-size:larger;
-    background-color: var(--primaryLight)
+    background-color: var(--secondaryLightest)
 }
 
 table.input td.replaced
