@@ -449,7 +449,7 @@ div.messages
 }
 
 .prereq-error input[type="search"]{
-    background-color: red;
+    background-color: yellow;
 }
 
 .error input[type="search"]{
