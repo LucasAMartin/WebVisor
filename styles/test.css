@@ -88,6 +88,7 @@ body{
 .wave {
     position: absolute;
     bottom: 0;
+    left: 0;
     width: 100%;
     height: 14rem;
 }
@@ -454,6 +455,10 @@ div.messages
 
 .error input[type="search"]{
     background-color: red;
+}
+
+select {
+    max-width: 12rem
 }
 
 @media only screen and (max-width: 72rem) {
