@@ -181,9 +181,9 @@
         }
         if ($program_id != 0) {
             $students_in_program = array();
-            //	$students_in_program = students_in_program($program_id);
-            //	echo("Students in program: $program_id");
-            //	print_r($students_in_program);
+            // $students_in_program = students_in_program($program_id);
+            // echo("Students in program: $program_id");
+            // print_r($students_in_program);
             if (count($students_in_program) > 0) {
                 $all_students_blank = $all_students_blank + array('0000' => '');
                 $all_students_blank = $all_students_blank + array('00000' => '==PROGRAM STUDENTS==');
@@ -192,6 +192,7 @@
                 // but we do not get here
             }
         }
+        
 
         $all_students_blank = $all_students_blank + array('000000' => '');
         $all_students_blank = $all_students_blank + array('0000000' => '==OTHER STUDENTS==');
@@ -1006,7 +1007,8 @@
         }
         ?>
 
-        <?php
+
+<?php
         if ($student_id != 0) {
             ?>
             <form action='student.php#general_education' method='post' id='general_education'>
@@ -1015,6 +1017,7 @@
             <?php
         }
         ?>
+
 
         <?php
         if ($student_id != 0) {

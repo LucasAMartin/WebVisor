@@ -265,3 +265,8 @@ CREATE TABLE user_programs (
 )  ENGINE=INNODB;
 
 
+CREATE TABLE gen_ed (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    requirement ENUM('K1', 'K2', 'K3', 'K4', 'K5', 'K6', 'K7', 'K8', 'Quantitative Reasoning', 'Academic Writing I', 'First Year Experience') NOT NULL
+) ENGINE=INNODB;
