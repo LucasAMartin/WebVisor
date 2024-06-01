@@ -1508,7 +1508,7 @@ function get_prereqs($class_id)
 			term,
 			student_id
 		FROM
-			student_classes
+			
 			JOIN students ON students.id=student_classes.student_id
 		WHERE
 			class_id=$id
@@ -1897,6 +1897,7 @@ GROUP BY
 		return $student_id;
 	}
 
+	
 	function update_student($user_id, $student_id, $first, $last, $cwu_id, $email, $phone, $address, $postbaccalaureate, $withdrawing, $veterans_benefits, $active, $international_student, $transfer_student)
 	{
 		global $link;
@@ -2809,5 +2810,120 @@ ORDER BY
 		return $enrollments;
 	}
 
+	//-----------------------------------------------------
+	//! GEN EDS
+	//-----------------------------------------------------
+// Function to fetch data from gen_ed table
+function get_gen_ed_data() {
+
+	global $link;
+
+    if (!$link) {
+        die("Error: No valid database connection.");
+    }
+    
+    $sql = "SELECT requirement, name FROM gen_ed";
+    $result = mysqli_query($link, $sql);
+
+    if (!$result) {
+        die("Error: " . mysqli_error($link));
+    }
+
+    $requirements = array(
+        'K1' => array(),
+        'K2' => array(),
+        'K3' => array(),
+        'K4' => array(),
+        'K5' => array(),
+        'K6' => array(),
+        'K7' => array(),
+        'K8' => array(),
+        'Quantitative Reasoning' => array(),
+        'Academic Writing I' => array(),
+        'First Year Experience' => array()
+    );
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $requirements[$row['requirement']][] = $row['name'];
+        }
+    }
+    
+    return $requirements;
+}
+
+function update_student_gen_ed($user_id, $student_id, $requirement, $name)
+{
+    global $link;
+    
+    // Check if the gen ed entry already exists for the student
+    $existing_gen_ed_query = "
+        SELECT id
+        FROM student_gen_eds
+        WHERE student_id = $student_id
+        AND requirement = '$requirement'
+    ";
+    $existing_gen_ed_result = my_query($existing_gen_ed_query, false);
+    $existing_gen_ed_row = mysqli_fetch_assoc($existing_gen_ed_result);
+
+    if ($existing_gen_ed_row) {
+        // If the gen ed entry exists, update its name
+        $gen_ed_id = $existing_gen_ed_row['id'];
+        $query_string = "
+            UPDATE student_gen_eds
+            SET name = '$name'
+            WHERE id = $gen_ed_id
+        ";
+        $result = my_query($query_string, false);
+
+        if ($result) {
+            $note = "<gen_ed:$requirement> updated for <student:$student_id>.";
+            record_update_student($user_id, $student_id, $note);
+            return true;
+        } else {
+            return false; // Failed to update
+        }
+    } else {
+        // If the gen ed entry does not exist, insert a new one
+        return add_student_gen_ed($user_id, $student_id, $requirement, $name);
+    }
+}
+
+
+function get_student_gen_eds($student_id)
+{
+    global $link;
+    
+    $query_string = "
+        SELECT requirement, name
+        FROM student_gen_eds
+        WHERE student_id = $student_id
+    ";
+
+    $result = my_query($query_string, false);
+    
+    $student_gen_eds = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $student_gen_eds[] = $row;
+    }
+
+    return $student_gen_eds;
+}
+
+function add_student_gen_ed($user_id, $student_id, $requirement, $name)
+{
+    global $link;
+    $query_string = "
+        INSERT INTO student_gen_eds (student_id, requirement, name)
+        VALUES ($student_id, '$requirement', '$name')
+    ";
+    $result = my_query($query_string, false);
+    $student_gen_ed_id = mysqli_insert_id($link);
+    if ($student_gen_ed_id) {
+        $note = "<gen_ed:$requirement> added to <student:$student_id>.";
+        record_update_student($user_id, $student_id, $note);
+    }
+    return $student_gen_ed_id;
+}
 
 ?>

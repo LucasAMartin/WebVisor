@@ -1207,3 +1207,16 @@ INSERT INTO gen_ed (name, requirement) VALUES
 ('not taken', 'First Year Experience'), 
 ('transferred', 'First Year Experience');
 
+INSERT INTO classes (name, title, credits, fall, winter, spring, summer, active)
+VALUES 
+    ('K1', 'Academic Writing II', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K2', 'Community Culture & Citizenship', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K3', 'Creative Expression', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K4', 'Global Dynamics', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K5', 'Humanities', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K6', 'Individual & Society', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K7', 'Physical & Natural World', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K8', 'Science & Technology', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('QR', 'Quantitative Reasoning', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('AW I', 'Academic Writing I', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('FYE', 'First Year Experience', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes');

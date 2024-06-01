@@ -270,3 +270,12 @@ CREATE TABLE gen_ed (
     name VARCHAR(255) NOT NULL,
     requirement ENUM('K1', 'K2', 'K3', 'K4', 'K5', 'K6', 'K7', 'K8', 'Quantitative Reasoning', 'Academic Writing I', 'First Year Experience') NOT NULL
 ) ENGINE=INNODB;
+
+CREATE TABLE student_gen_eds (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT NOT NULL,
+    requirement VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    -- Add any additional columns you may need, such as term, status, etc.
+    FOREIGN KEY (student_id) REFERENCES students(id)
+) ENGINE=INNODB;

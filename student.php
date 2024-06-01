@@ -20,8 +20,11 @@
         die();
     }
 
+    // Fetch the data
+    $requirements = get_gen_ed_data();
     $user_id = $user_info['id'];
     $superuser = is_superuser($user_info);
+
 
     $program_id = extract_int($_POST, 'program_id', $user_info['program_id']);
 
@@ -164,6 +167,17 @@
         update_requirements($student_id, $requirements_taken);
     }
 
+    if (isset($_POST['update_student_gen_ed']) && $can_edit) {
+        $student_id = isset($_POST['student_id']) ? $_POST['student_id'] : 0; // Default value if not provided
+        // Iterate through each requirement to extract the selected names
+        foreach ($requirements as $requirement => $names) {
+            $selected_name = isset($_POST[$requirement]) ? $_POST[$requirement] : ''; // Get the selected name for this requirement
+            // Call the function to update student gen eds
+            update_student_gen_ed($user_id, $student_id, $requirement, $selected_name);
+        }
+    }
+    
+    
 
     //! LOAD DATA
     $all_programs_blank = array('0' => '') + all_programs($user_id);
@@ -1009,12 +1023,47 @@
 
 
 <?php
+
+// Retrieve student's general education requirements
+$student_gen_eds = get_student_gen_eds($student_id);
+
         if ($student_id != 0) {
+
             ?>
             <form action='student.php#general_education' method='post' id='general_education'>
+            <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
+            <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
                 <h2>Gen Ed Requirements</h2>
-            </form>
-            <?php
+
+            
+
+                <?php foreach ($requirements as $requirement => $names): ?>
+            <label for="<?php echo htmlspecialchars($requirement); ?>"><?php echo htmlspecialchars($requirement); ?></label>
+            <select name="<?php echo htmlspecialchars($requirement); ?>" id="<?php echo htmlspecialchars($requirement); ?>">
+                <option value="">Select an option</option>
+                <?php foreach ($names as $name): ?>
+                    <?php
+                    // Check if there are previously selected values for this requirement
+                    $selected = '';
+                    foreach ($student_gen_eds as $gen_ed) {
+                        if ($gen_ed['requirement'] === $requirement && $gen_ed['name'] === $name) {
+                            $selected = 'selected';
+                            break;
+                        }
+                    }
+                    ?>
+                    <option value="<?php echo htmlspecialchars($name); ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($name); ?></option>
+                <?php endforeach; ?>
+            </select>
+            <!-- Hidden input field to store the selected value -->
+            <input type="hidden" name="<?php echo htmlspecialchars($requirement . '_selected'); ?>" value="<?php echo $selected ? htmlspecialchars($name) : ''; ?>">
+            <br>
+        <?php endforeach; ?>
+        <tr class='footer'>
+            <td colspan='3'><input type="submit" name="update_student_gen_ed" value="Update Gen Eds"></td>
+        </tr>
+    </form>
+    <?php
         }
         ?>
 
