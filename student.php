@@ -1260,10 +1260,16 @@ if ($student_id != 0) {
                 let veteranBenefits = document.querySelector('input[name="update_veterans_benefits"]').checked;
                 let internationalStudent = document.querySelector('input[name="update_international_student"]').checked;
 
-                if (transferStudent || internationalStudent || veteranBenefits) {
-                    console.log("true")
+                if (transferStudent) {
                     document.documentElement.style.setProperty('--secondaryLightest', 'lightblue');
                 }
+                if (internationalStudent) {
+                    document.documentElement.style.setProperty('--secondaryLightest', 'yellow');
+                }
+                if (veteranBenefits) {
+                    document.documentElement.style.setProperty('--secondaryLightest', 'lightgreen');
+                }
+
 
             });
         </script>
