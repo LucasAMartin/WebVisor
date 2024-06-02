@@ -240,7 +240,7 @@ body.print h1
 body.print h2
 {
 	font-size:12pt;
-	font-weigth:bold;
+	font-weight:bold;
 	border-top: 3px double #8c8b8b;
 	border-bottom: 3px double #8c8b8b;
 	text-align: center;

@@ -1106,7 +1106,7 @@ INSERT INTO gen_ed (name, requirement) VALUES
 ('PHYS 106', 'K7'),
 ('SCED 101', 'K7'),
 ('BIOL 101', 'K7'),
-('CHEM 113 & 113LAB', 'K7'),
+('CHEM 113 & LAB', 'K7'),
 ('EXSC 154', 'K7'),
 ('PHYS 109', 'K7'),
 ('ENST 201', 'K7'),
@@ -1116,8 +1116,8 @@ INSERT INTO gen_ed (name, requirement) VALUES
 ('PHYS 101', 'K7'),
 ('SCED 102', 'K7'),
 ('STEP 101 & 102 & 103', 'K7'),
-('CHEM 111 & 111LAB', 'K7'),
-('CHEM 181 & 181LAB', 'K7'),
+('CHEM 111 & LAB', 'K7'),
+('CHEM 181 & LAB', 'K7'),
 ('DHC 180', 'K7'),
 ('PHYS 103', 'K7'),
 
@@ -1220,3 +1220,15 @@ VALUES
     ('QR', 'Quantitative Reasoning', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
     ('AW I', 'Academic Writing I', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
     ('FYE', 'First Year Experience', 4, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes');
+
+    ('K1', 'Academic Writing II', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K2', 'Community Culture & Citizenship', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K3', 'Creative Expression', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K4', 'Global Dynamics', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K5', 'Humanities', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K6', 'Individual & Society', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K7', 'Physical & Natural World', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('K8', 'Science & Technology', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('QR', 'Quantitative Reasoning', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('AW I', 'Academic Writing I', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes'),
+    ('FYE', 'First Year Experience', 5, 'Yes', 'Yes', 'Yes', 'Yes', 'Yes');

@@ -1027,45 +1027,161 @@
 // Retrieve student's general education requirements
 $student_gen_eds = get_student_gen_eds($student_id);
 
-        if ($student_id != 0) {
+if ($student_id != 0) {
+    ?>
+    <style>
+        .gen-ed-select {
+            width: 180px; /* Set your desired width */
+            text-align: center; /* Align text inside the dropdown to the center */
+        }
+        .gen-ed-label {
+            display: inline-block;
+            text-align: left; /* Align label text to the left */
+            margin-right: 10px; /* Add space between the label and the dropdown */
+        }
+        .gen-ed-container {
+            margin-bottom: 10px; /* Space between each dropdown */
+        }
 
+        .k1-k8-container {
+            margin-bottom: 5px; /* Space specifically for K1-K8 dropdowns */
+        }
+        .k1-k8-container .gen-ed-label {
+            margin-right: 5px; /* Reduced space specifically for K1-K8 labels */
+            width: 25px; /* Set a fixed width for labels to align with the selects */
+        }
+        .update-button {
+            text-align: left; /* Center the update button */
+            margin-top: 20px; /* Space between middle section and update button */
+        }
+
+        .middle-section {
+            display: flex;
+            margin-top: 20px; /* Adjusted margin-top */
+        }
+
+        .middle-column {
+            flex: 1 1 auto; /* Adjusted flex property */
+            margin-right: 20px;
+        }
+
+        .top-section .gen-ed-label{
+            width: 200px; /* Set a fixed width for labels to align with the selects */
+        }
+
+
+    </style>
+    <form action='student.php#general_education' method='post' id='general_education'>
+        <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
+        <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
+        <h2>Gen Ed Requirements</h2>
+
+      <div class="top-section">
+        <!-- Top section with Quantitative Reasoning, Academic Writing I, and First Year Experience -->
+        <table>
+            <?php
+            $top_requirements = ['First Year Experience', 'Academic Writing I', 'Quantitative Reasoning'];
+            foreach ($top_requirements as $requirement) {
+                ?>
+                <tr class="gen-ed-container">
+                    <td>
+                        <label class="gen-ed-label" for="<?php echo htmlspecialchars($requirement); ?>"><?php echo htmlspecialchars($requirement); ?></label>
+                    </td>
+                    <td>
+                        <select class="gen-ed-select" name="<?php echo htmlspecialchars($requirement); ?>" id="<?php echo htmlspecialchars($requirement); ?>">
+                            <option value="">Select an option</option>
+                            <?php foreach ($requirements[$requirement] as $name): ?>
+                                <?php
+                                // Check if there are previously selected values for this requirement
+                                $selected = '';
+                                foreach ($student_gen_eds as $gen_ed) {
+                                    if ($gen_ed['requirement'] === $requirement && $gen_ed['name'] === $name) {
+                                        $selected = 'selected';
+                                        break;
+                                    }
+                                }
+                                ?>
+                                <option value="<?php echo htmlspecialchars($name); ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($name); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </td>
+                </tr>
+                <?php
+            }
             ?>
-            <form action='student.php#general_education' method='post' id='general_education'>
-            <input type='hidden' name='student_id' value='<?php echo($student_id); ?>'/>
-            <input type='hidden' name='program_id' value='<?php echo($program_id); ?>'/>
-                <h2>Gen Ed Requirements</h2>
-
-            
-
-                <?php foreach ($requirements as $requirement => $names): ?>
-            <label for="<?php echo htmlspecialchars($requirement); ?>"><?php echo htmlspecialchars($requirement); ?></label>
-            <select name="<?php echo htmlspecialchars($requirement); ?>" id="<?php echo htmlspecialchars($requirement); ?>">
-                <option value="">Select an option</option>
-                <?php foreach ($names as $name): ?>
-                    <?php
-                    // Check if there are previously selected values for this requirement
-                    $selected = '';
-                    foreach ($student_gen_eds as $gen_ed) {
-                        if ($gen_ed['requirement'] === $requirement && $gen_ed['name'] === $name) {
-                            $selected = 'selected';
-                            break;
-                        }
-                    }
+        </table>
+        </div>
+        
+        <!-- Middle section with K1-K4 and K5-K8 in columns -->
+        <div class="middle-section">
+        <div class="middle-column">
+                <?php
+                $middle_requirements = ['K1', 'K2', 'K3', 'K4'];
+                foreach ($middle_requirements as $requirement) {
                     ?>
-                    <option value="<?php echo htmlspecialchars($name); ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($name); ?></option>
-                <?php endforeach; ?>
-            </select>
-            <!-- Hidden input field to store the selected value -->
-            <input type="hidden" name="<?php echo htmlspecialchars($requirement . '_selected'); ?>" value="<?php echo $selected ? htmlspecialchars($name) : ''; ?>">
-            <br>
-        <?php endforeach; ?>
-        <tr class='footer'>
-            <td colspan='3'><input type="submit" name="update_student_gen_ed" value="Update Gen Eds"></td>
-        </tr>
+                    <div class="gen-ed-container k1-k8-container">
+                        <label class="gen-ed-label" for="<?php echo htmlspecialchars($requirement); ?>"><?php echo htmlspecialchars($requirement); ?></label>
+                        <select class="gen-ed-select" name="<?php echo htmlspecialchars($requirement); ?>" id="<?php echo htmlspecialchars($requirement); ?>">
+                            <option value="">Select an option</option>
+                            <?php foreach ($requirements[$requirement] as $name): ?>
+                                <?php
+                                // Check if there are previously selected values for this requirement
+                                $selected = '';
+                                foreach ($student_gen_eds as $gen_ed) {
+                                    if ($gen_ed['requirement'] === $requirement && $gen_ed['name'] === $name) {
+                                        $selected = 'selected';
+                                        break;
+                                    }
+                                }
+                                ?>
+                                <option value="<?php echo htmlspecialchars($name); ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($name); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+
+            <div class="middle-column">
+                <?php
+                $bottom_requirements = ['K5', 'K6', 'K7', 'K8'];
+                foreach ($bottom_requirements as $requirement) {
+                    ?>
+                    <div class="gen-ed-container k1-k8-container">
+                        <label class="gen-ed-label" for="<?php echo htmlspecialchars($requirement); ?>"><?php echo htmlspecialchars($requirement); ?></label>
+                        <select class="gen-ed-select" name="<?php echo htmlspecialchars($requirement); ?>" id="<?php echo htmlspecialchars($requirement); ?>">
+                            <option value="">Select an option</option>
+                            <?php foreach ($requirements[$requirement] as $name): ?>
+                                <?php
+                                // Check if there are previously selected values for this requirement
+                                $selected = '';
+                                foreach ($student_gen_eds as $gen_ed) {
+                                    if ($gen_ed['requirement'] === $requirement && $gen_ed['name'] === $name) {
+                                        $selected = 'selected';
+                                        break;
+                                    }
+                                }
+                                ?>
+                                <option value="<?php echo htmlspecialchars($name); ?>" <?php echo $selected; ?>><?php echo htmlspecialchars($name); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <?php
+                }
+                ?>
+            </div>
+        </div>
+
+        <!-- Add an Update button -->
+        <div class="update-button">
+            <input type="submit" name="update_student_gen_ed" value="Update Gen Eds">
+        </div>
     </form>
     <?php
-        }
-        ?>
+}
+?>
+
 
 
         <?php
