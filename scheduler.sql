@@ -12,7 +12,7 @@ CREATE TABLE classes (
     spring ENUM('Yes', 'No') DEFAULT 'No' NOT NULL,
     summer ENUM('Yes', 'No') DEFAULT 'No' NOT NULL,
     active ENUM('Yes', 'No') DEFAULT 'Yes' NOT NULL,
-    CONSTRAINT uq_Class_name_credit UNIQUE (name , credits)
+    CONSTRAINT uq_Class_name_credit UNIQUE (name, credits)
 )  ENGINE=INNODB;
 
 CREATE TABLE majors (
