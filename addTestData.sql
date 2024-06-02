@@ -1169,6 +1169,7 @@ INSERT INTO gen_ed (name, requirement) VALUES
 ('MATH 164', 'Quantitative Reasoning'),
 ('MATH 172', 'Quantitative Reasoning'),
 ('MATH 211', 'Quantitative Reasoning'),
+('PHYS 111', 'Quantitative Reasoning'),   
 ('PHYS 181', 'Quantitative Reasoning'),
 ('PSY 362', 'Quantitative Reasoning'),
 ('SOC 326', 'Quantitative Reasoning'),
