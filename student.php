@@ -652,7 +652,7 @@
                 ?>
                 <table class='input'>
                     <tr class='header'>
-                        <td colspan='3'>Core Courses - <?php echo($total_credits)?> of 180 credits</td>
+                        <td colspan='3'>Core Courses - <?php echo($total_credits)?> of 180 total credits</td>
                         <td class='spacer'/>
                         <td>Electives</td>
                     </tr>

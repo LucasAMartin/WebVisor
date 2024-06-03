@@ -1456,7 +1456,7 @@ function get_class_rosters($id)
 			term,
 			student_id
 		FROM
-			
+			student_classes
 			JOIN students ON students.id=student_classes.student_id
 		WHERE
 			class_id=$id
