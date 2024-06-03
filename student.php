@@ -228,6 +228,7 @@
         $active = $student_info['active'];
         $phone = $student_info['phone'];
         $address = $student_info['address'];
+        $total_credits = get_total_credits($student_id);
 
         $postbaccalaureate = $student_info['postbaccalaureate'];
         $withdrawing = $student_info['withdrawing'];
@@ -651,7 +652,7 @@
                 ?>
                 <table class='input'>
                     <tr class='header'>
-                        <td colspan='3'>Core Courses</td>
+                        <td colspan='3'>Core Courses - <?php echo($total_credits)?> of 180 credits</td>
                         <td class='spacer'/>
                         <td>Electives</td>
                     </tr>
